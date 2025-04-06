@@ -36,6 +36,10 @@ public class CartaoCredito extends FormaDePagamento implements Serializable {
         this.limite = limite;
     }
 
+    public String getNumero() {
+        return numero;
+    }
+
     public double getLimite() {
         return limite;
     }
