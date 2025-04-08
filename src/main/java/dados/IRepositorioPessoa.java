@@ -1,9 +1,6 @@
 package dados;
 
-import negocios.basicas.Cliente;
-import negocios.basicas.Motorista;
-import negocios.basicas.Pessoa;
-import negocios.basicas.Veiculo;
+import negocios.basicas.*;
 
 /**
  *
@@ -20,6 +17,4 @@ public interface IRepositorioPessoa {
     Pessoa buscarPorCpf(String cpf);    
     boolean atualizar(String cpf, String email, String telefone);
    
-    
-    void adicionarVeiculoMotorista(Veiculo veiculo);
 }

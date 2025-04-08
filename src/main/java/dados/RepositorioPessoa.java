@@ -1,17 +1,8 @@
 package dados;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-import negocios.basicas.Cliente;
-import negocios.basicas.FormaDePagamento;
-import negocios.basicas.Motorista;
-import negocios.basicas.Pessoa;
-import negocios.basicas.Veiculo;
+import java.io.*;
+import java.util.*;
+import negocios.basicas.*;
 
 /**
  * @author Maria Luiza Bezerra
@@ -19,61 +10,43 @@ import negocios.basicas.Veiculo;
 public class RepositorioPessoa implements IRepositorioPessoa {
     private List<Cliente> clientes;
     private List<Motorista> motoristas;
-    private List<Veiculo> veiculos;
     
     private IRepositorioPagamentos repoPagamentos;
     
-    private static final String ARQ_CLIENTES = "clientes.dat";
-    private static final String ARQ_MOTORISTAS = "motoristas.dat";
-    private static final String ARQ_VEICULOS = "veiculos.dat";
+    private static final String PASTA_DADOS = "data/";
+    private static final String ARQ_CLIENTES = PASTA_DADOS + "clientes.dat";
+    private static final String ARQ_MOTORISTAS = PASTA_DADOS + "motoristas.dat";
 
     public RepositorioPessoa(){
-        this.clientes = new ArrayList<>();
-        this.motoristas = new ArrayList<>();
-        this.veiculos = new ArrayList<>();
-        carregarDados();
+        criarPastasDados();
+        this.clientes = carregar(ARQ_CLIENTES);
+        this.motoristas = carregar(ARQ_MOTORISTAS);
     }
     
-    private void carregarDados(){
-        try{
-            FileInputStream fis = new FileInputStream(ARQ_CLIENTES);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            clientes = (List<Cliente>) ois.readObject();
-            ois.close();
-            
-            fis = new FileInputStream(ARQ_MOTORISTAS);
-            ois = new ObjectInputStream(fis);
-            motoristas = (List<Motorista>) ois.readObject();
-            ois.close();
-            
-            fis = new FileInputStream(ARQ_VEICULOS);
-            ois = new ObjectInputStream(fis);
-            veiculos = (List<Veiculo>) ois.readObject();
-            ois.close();
+    private void criarPastasDados(){
+        new File (PASTA_DADOS).mkdirs();
+    }
+    
+    @SuppressWarnings("unchecked")
+    private <T> List<T> carregar(String caminho){
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(caminho))){
+            return (List<T>) in.readObject();
         } catch (IOException | ClassNotFoundException e){
+            return new ArrayList<>();
+        }
+    }
+    
+    private <T> void salvar(List<T> lista, String caminho){
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(caminho))){
+            out.writeObject(lista);
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
     
     private void salvarDados(){
-        try{
-            FileOutputStream fos = new FileOutputStream(ARQ_CLIENTES);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(clientes);
-            oos.close();
-            
-            fos = new FileOutputStream(ARQ_MOTORISTAS);
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(motoristas);
-            oos.close();
-            
-            fos = new FileOutputStream(ARQ_VEICULOS);
-            oos = new ObjectOutputStream(fos);
-            oos.writeObject(veiculos);
-            oos.close();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        salvar(clientes, ARQ_CLIENTES);
+        salvar(motoristas, ARQ_MOTORISTAS);
     }
 
     @Override
@@ -110,14 +83,6 @@ public class RepositorioPessoa implements IRepositorioPessoa {
             }
         }
         return null;
-    }
-
-    @Override
-    public void adicionarVeiculoMotorista(Veiculo veiculo) {
-       if(veiculo != null){
-           veiculos.add(veiculo);
-           salvarDados();
-       }
     }
 
     @Override

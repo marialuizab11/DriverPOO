@@ -1,10 +1,6 @@
 package dados;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import negocios.basicas.Viagem;
@@ -15,18 +11,24 @@ import negocios.basicas.Viagem;
 public class RepositorioViagem implements IRepositorioViagem {
     private List<Viagem> viagens;
     
-    private static final String ARQUIVO = "viagens.dat";
+    private static final String ARQUIVO = "viagens.ser";
 
-    public RepositorioViagem(List<Viagem> viagens) {
-        this.viagens = new ArrayList<>();
-        carregar();
+    public RepositorioViagem() {
+        this.viagens = carregar();
     }
     
-    private void carregar(){
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(ARQUIVO))){
-            this.viagens = (List<Viagem>) ois.readObject();            
-        } catch (IOException | ClassNotFoundException e){
-            e.getMessage();
+    private List<Viagem> carregar(){
+        File file = new File(ARQUIVO);
+
+        if (!file.exists()) {
+            return new ArrayList<>();
+        }
+
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+            return (List<Viagem>) ois.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace(); 
+            return new ArrayList<>();
         }
     }
     
@@ -34,7 +36,7 @@ public class RepositorioViagem implements IRepositorioViagem {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO))){
             oos.writeObject(viagens);
         } catch (IOException e){
-            e.getMessage();
+            e.printStackTrace();
         }
     }
     

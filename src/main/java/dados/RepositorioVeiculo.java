@@ -1,11 +1,6 @@
 package dados;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import negocios.basicas.Motorista;
@@ -15,35 +10,32 @@ import negocios.basicas.Veiculo;
  * @author Maria Luiza Bezerra
  */
 public class RepositorioVeiculo implements IRepositorioVeiculo {
-    private static final String ARQUIVO_VEICULOS = "veiculos.dat";
+    private static final String ARQUIVO = "veiculos.ser";
     private List<Veiculo> veiculos;
 
     public RepositorioVeiculo() {
-        this.veiculos = new ArrayList<>();
-        carregarDados();
+        this.veiculos = carregar();
     }
     
-    private void salvarDados(){
-        try{
-            File arquivo = new File(ARQUIVO_VEICULOS);
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(arquivo));
-            oos.writeObject(veiculos);
-            oos.close();
+    private void salvar(){
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ARQUIVO))){
+            out.writeObject(veiculos);
         } catch (IOException e){
             e.printStackTrace();
         }
     }
     
-    public void carregarDados(){
-        File arquivo = new File(ARQUIVO_VEICULOS);
-        if(arquivo.exists()){
-            try{
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(arquivo));
-                veiculos = (List<Veiculo>) ois.readObject();
-                ois.close();
-            } catch (IOException | ClassNotFoundException e){
-                e.printStackTrace();
-            }
+    public List<Veiculo> carregar(){
+        File file = new File(ARQUIVO);
+        
+        if(!file.exists()){
+            return new ArrayList<>();
+        }
+        
+         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(file))){
+             return (List<Veiculo>) in.readObject();
+        } catch (Exception e){
+            return new ArrayList<>();
         }
     }
 
@@ -51,7 +43,7 @@ public class RepositorioVeiculo implements IRepositorioVeiculo {
     public void adicionar(Motorista motorista, Veiculo veiculo) {
         veiculo.setMotorista(motorista);
         veiculos.add(veiculo);
-        salvarDados();
+        salvar();
     }
 
     @Override

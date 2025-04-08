@@ -1,14 +1,7 @@
 package dados;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import negocios.basicas.CartaoCredito;
 import negocios.basicas.FormaDePagamento;
 
@@ -21,39 +14,37 @@ public class RepositorioPagamentos implements IRepositorioPagamentos {
     
     private static final String ARQ_PAGAMENTOS = "pagamentos.dat";
 
-    public RepositorioPagamentos(Map<String, List<FormaDePagamento>> formasPagamento) {
-        this.formasPagamento = new HashMap<>();
-        carregarDados();
+    public RepositorioPagamentos() {
+        criarPastaDados();
+        this.formasPagamento = carregar();
     }
     
-    private void carregarDados(){
-        try{
-            FileInputStream fis = new FileInputStream(ARQ_PAGAMENTOS);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            formasPagamento = (Map<String, List<FormaDePagamento>>) ois.readObject();
-            ois.close();
+    private void criarPastaDados(){
+        new File("data/").mkdirs();
+    }
+    
+    @SuppressWarnings("unchecked")
+    private Map<String, List<FormaDePagamento>> carregar(){
+        try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(ARQ_PAGAMENTOS))){
+            return (Map<String, List<FormaDePagamento>>) in.readObject();
         } catch(IOException | ClassNotFoundException e){
-            e.getMessage();
+            return new HashMap<>();
         }
     }
     
-    private void salvarDados(){
-        try{
-            FileOutputStream fos = new FileOutputStream(ARQ_PAGAMENTOS);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(formasPagamento);
-            oos.close();
+    private void salvar(){
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ARQ_PAGAMENTOS))){
+            out.writeObject(formasPagamento);
         } catch (IOException e){
-            e.getMessage();
+            e.printStackTrace();
         }
     }
       
     @Override
     public void adicionar(String cpfCliente, FormaDePagamento formaPagamento) {
         if(formaPagamento!= null && cpfCliente != null){
-            formasPagamento.computeIfAbsent(cpfCliente, k-> new ArrayList<>());
-            formasPagamento.get(cpfCliente).add(formaPagamento);
-            salvarDados();
+            formasPagamento.computeIfAbsent(cpfCliente, k-> new ArrayList<>()).add(formaPagamento);
+            salvar();
         }
     }
 
@@ -62,10 +53,23 @@ public class RepositorioPagamentos implements IRepositorioPagamentos {
         if(formasPagamento.containsKey(cpf)){
             List<FormaDePagamento> formas = formasPagamento.get(cpf);
             
-            formas.removeIf(forma -> forma instanceof CartaoCredito && ((CartaoCredito)forma).getNumero().equals(numeroCartao));
-            salvarDados();
+            List<FormaDePagamento> formasAtualizadas = new ArrayList<>();
+            
+            for(FormaDePagamento forma : formas){
+                if(forma instanceof CartaoCredito){
+                    CartaoCredito cartao = (CartaoCredito) forma;
+                    
+                    if(!cartao.getNumero().equals(numeroCartao)){
+                        formasAtualizadas.add(cartao);
+                    }
+                } else {
+                    formasAtualizadas.add(forma);
+                }
+            }
+            formasPagamento.put(cpf, formasAtualizadas);
+            
+            salvar();
         }
-        
     }
 
     @Override
