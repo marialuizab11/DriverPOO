@@ -16,8 +16,5 @@ public abstract class FormaDePagamento {
 
     public void setValor(double valor) {
         this.valor = valor;
-    }
-
-    
-    
+    }   
 }

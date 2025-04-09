@@ -2,21 +2,20 @@ package dados;
 
 import java.io.*;
 import java.util.*;
-import negocios.basicas.CartaoCredito;
-import negocios.basicas.FormaDePagamento;
+import negocios.basicas.*;
 
 /**
  * @author Maria Luiza Bezerra
  */
 public class RepositorioPagamentos implements IRepositorioPagamentos {
-
-    private Map<String, List<FormaDePagamento>> formasPagamento;
+    private Map<String, FormaDePagamento> pagamentos;
+    private Pix pix;
     
-    private static final String ARQ_PAGAMENTOS = "pagamentos.dat";
+    private static final String ARQ_PAGAMENTOS = "pagamentos.ser";
 
     public RepositorioPagamentos() {
         criarPastaDados();
-        this.formasPagamento = carregar();
+        this.pagamentos = carregar();
     }
     
     private void criarPastaDados(){
@@ -24,9 +23,9 @@ public class RepositorioPagamentos implements IRepositorioPagamentos {
     }
     
     @SuppressWarnings("unchecked")
-    private Map<String, List<FormaDePagamento>> carregar(){
+    private Map<String, FormaDePagamento> carregar(){
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(ARQ_PAGAMENTOS))){
-            return (Map<String, List<FormaDePagamento>>) in.readObject();
+            return (Map<String, FormaDePagamento>) in.readObject();
         } catch(IOException | ClassNotFoundException e){
             return new HashMap<>();
         }
@@ -34,57 +33,20 @@ public class RepositorioPagamentos implements IRepositorioPagamentos {
     
     private void salvar(){
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ARQ_PAGAMENTOS))){
-            out.writeObject(formasPagamento);
+            out.writeObject(pagamentos);
         } catch (IOException e){
             e.printStackTrace();
         }
     }
       
     @Override
-    public void adicionar(String cpfCliente, FormaDePagamento formaPagamento) {
-        if(formaPagamento!= null && cpfCliente != null){
-            formasPagamento.computeIfAbsent(cpfCliente, k-> new ArrayList<>()).add(formaPagamento);
-            salvar();
-        }
+    public void adicionar(String idViagem, FormaDePagamento pagamento) {
+        pagamentos.put(idViagem, pagamento);
+        salvar();
     }
-
-    @Override
-    public void removerCartao(String cpf, String numeroCartao) {
-        if(formasPagamento.containsKey(cpf)){
-            List<FormaDePagamento> formas = formasPagamento.get(cpf);
-            
-            List<FormaDePagamento> formasAtualizadas = new ArrayList<>();
-            
-            for(FormaDePagamento forma : formas){
-                if(forma instanceof CartaoCredito){
-                    CartaoCredito cartao = (CartaoCredito) forma;
-                    
-                    if(!cartao.getNumero().equals(numeroCartao)){
-                        formasAtualizadas.add(cartao);
-                    }
-                } else {
-                    formasAtualizadas.add(forma);
-                }
-            }
-            formasPagamento.put(cpf, formasAtualizadas);
-            
-            salvar();
-        }
-    }
-
-    @Override
-    public List<CartaoCredito> listarCartoes(String cpf) {
-        List<CartaoCredito> cartoes = new ArrayList<>();
-        
-        if(formasPagamento.containsKey(cpf)){
-            for(FormaDePagamento forma : formasPagamento.get(cpf)){
-                if(forma instanceof CartaoCredito){
-                    cartoes.add((CartaoCredito) forma);
-                }
-            }
-        }
-        
-        return cartoes;
+    
+    public String gerarPix(double valor){
+        return pix.getQrCodeGerado()+valor;
     }
     
 }

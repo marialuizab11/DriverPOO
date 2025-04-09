@@ -8,5 +8,5 @@ import negocios.basicas.Viagem;
  */
 public interface IRepositorioViagem {
     public void adicionar(Viagem viagem);
-    Viagem exibirViagem(int id);
+    Viagem buscarViagem(int id);
 }

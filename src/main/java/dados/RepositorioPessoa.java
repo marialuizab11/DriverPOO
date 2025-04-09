@@ -3,6 +3,7 @@ package dados;
 import java.io.*;
 import java.util.*;
 import negocios.basicas.*;
+import negocios.excecoes.PessoaNaoEncontradaException;
 
 /**
  * @author Maria Luiza Bezerra
@@ -14,8 +15,8 @@ public class RepositorioPessoa implements IRepositorioPessoa {
     private IRepositorioPagamentos repoPagamentos;
     
     private static final String PASTA_DADOS = "data/";
-    private static final String ARQ_CLIENTES = PASTA_DADOS + "clientes.dat";
-    private static final String ARQ_MOTORISTAS = PASTA_DADOS + "motoristas.dat";
+    private static final String ARQ_CLIENTES = PASTA_DADOS + "clientes.ser";
+    private static final String ARQ_MOTORISTAS = PASTA_DADOS + "motoristas.ser";
 
     public RepositorioPessoa(){
         criarPastasDados();
@@ -97,36 +98,55 @@ public class RepositorioPessoa implements IRepositorioPessoa {
             return false;
         }
     }
+    
+    public void atualizarValidacao(Motorista motorista) throws PessoaNaoEncontradaException {
+        Motorista encontrado = buscarPorCnh(motorista.getCnh());
+        if (encontrado == null) {
+            throw new PessoaNaoEncontradaException("Motorista não encontrado!");
+        }
+        encontrado.setValidado(true);
+        salvarDados();
+    }
+    
+    public void atualizarDisponibilidade(Motorista motorista, boolean disponibilidade){
+        Motorista encontrado = buscarPorCnh(motorista.getCnh());
+        if (encontrado == null) {
+            throw new PessoaNaoEncontradaException("Motorista não encontrado!");
+        }
+        encontrado.setDisponivel(disponibilidade);
+        salvarDados();
+    }
 
     @Override
-    public boolean removerCliente(String cpf) {
+    public void removerCliente(String cpf) {
         Pessoa pessoa = buscarPorCpf(cpf);
-        if(pessoa!=null){
-            clientes.remove(pessoa);
+        clientes.remove(pessoa);
             salvarDados();
-            return true;
-        } else{
-            return false;
-        }
     }
     
     @Override
-    public boolean removerMotorista(String cpf){
+    public void removerMotorista(String cpf){
         Pessoa pessoa = buscarPorCpf(cpf);
-        if(pessoa!=null){
-            motoristas.remove(pessoa);
-            salvarDados();
-            return true;
-        } else{
-            return false;
-        }
+        motoristas.remove(pessoa);
+        salvarDados();
     }
     
     private boolean existePessoa(String cpf){
         return buscarPorCpf(cpf)!=null;
     }
     
-    public void adicionarFormaPagamentoCliente(FormaDePagamento pagamento, String cpf){
-        repoPagamentos.adicionar(cpf ,pagamento);
+    /**
+     * Lista todos os motoristas disponiveis para viagem. Isso significa que eles tem que estar disponivel e validado no sistema.
+     * 
+     */
+    public void listarMotoristasDisponiveis(){
+        if(motoristas.isEmpty()){
+            System.out.println("Ainda nao ha motoristas cadastrados");
+        }
+        for(Motorista mt : motoristas){
+            if(mt.isDisponivel() && mt.isValidado()){
+                System.out.println("Nome: "+mt.getNome());
+            }
+        }
     }
 }

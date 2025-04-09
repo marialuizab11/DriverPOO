@@ -10,7 +10,7 @@ import negocios.basicas.Veiculo;
  * @author Maria Luiza Bezerra
  */
 public class RepositorioVeiculo implements IRepositorioVeiculo {
-    private static final String ARQUIVO = "veiculos.ser";
+    private static final String ARQ_VEICULOS = "veiculos.ser";
     private List<Veiculo> veiculos;
 
     public RepositorioVeiculo() {
@@ -18,7 +18,7 @@ public class RepositorioVeiculo implements IRepositorioVeiculo {
     }
     
     private void salvar(){
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ARQUIVO))){
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(ARQ_VEICULOS))){
             out.writeObject(veiculos);
         } catch (IOException e){
             e.printStackTrace();
@@ -26,7 +26,7 @@ public class RepositorioVeiculo implements IRepositorioVeiculo {
     }
     
     public List<Veiculo> carregar(){
-        File file = new File(ARQUIVO);
+        File file = new File(ARQ_VEICULOS);
         
         if(!file.exists()){
             return new ArrayList<>();
@@ -56,4 +56,9 @@ public class RepositorioVeiculo implements IRepositorioVeiculo {
         return null;
     }
 
+    public void remover(String placa) {
+        Veiculo veiculo = buscarPorPlaca(placa);
+        veiculos.remove(veiculo);
+        salvar();
+    }
 }

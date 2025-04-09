@@ -11,14 +11,14 @@ import negocios.basicas.Viagem;
 public class RepositorioViagem implements IRepositorioViagem {
     private List<Viagem> viagens;
     
-    private static final String ARQUIVO = "viagens.ser";
+    private static final String ARQ_VIAGENS = "viagens.ser";
 
     public RepositorioViagem() {
         this.viagens = carregar();
     }
     
     private List<Viagem> carregar(){
-        File file = new File(ARQUIVO);
+        File file = new File(ARQ_VIAGENS);
 
         if (!file.exists()) {
             return new ArrayList<>();
@@ -33,7 +33,7 @@ public class RepositorioViagem implements IRepositorioViagem {
     }
     
     private void salvar() {
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQUIVO))){
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(ARQ_VIAGENS))){
             oos.writeObject(viagens);
         } catch (IOException e){
             e.printStackTrace();
@@ -42,14 +42,12 @@ public class RepositorioViagem implements IRepositorioViagem {
     
     @Override
     public void adicionar(Viagem viagem) {
-        if(viagem != null){
-            viagens.add(viagem);
-            salvar();
-        }
+        viagens.add(viagem);
+        salvar();
     }
 
     @Override
-    public Viagem exibirViagem(int id) {
+    public Viagem buscarViagem(int id) {
         for(Viagem vg: viagens){
             if(vg.getId() == id){
                 return vg;
