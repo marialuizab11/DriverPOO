@@ -8,7 +8,11 @@ import negocios.excecoes.PagamentoRecusadoException;
  * @author Maria Luiza Bezerra
  */
 public class GerenciadorPagamentos {
-    RepositorioPagamentos repoPagamentos = new RepositorioPagamentos();
+    RepositorioPagamentos repoPagamentos;
+    
+    public GerenciadorPagamentos(RepositorioPagamentos repoPagamentos){
+        this.repoPagamentos = repoPagamentos;
+    }
     
     public String gerarChavePix(double valor){
         return repoPagamentos.gerarPix(valor);

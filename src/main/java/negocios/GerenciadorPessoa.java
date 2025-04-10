@@ -3,6 +3,7 @@ package negocios;
 import dados.RepositorioPessoa;
 import negocios.basicas.Cliente;
 import negocios.basicas.Motorista;
+import negocios.basicas.Pessoa;
 import negocios.excecoes.*;
 
 /**
@@ -11,7 +12,11 @@ import negocios.excecoes.*;
  * @author Maria Luiza Bezerra
  */
 public class GerenciadorPessoa {
-    RepositorioPessoa repoPessoa = new RepositorioPessoa();
+    RepositorioPessoa repoPessoa;
+    
+    public GerenciadorPessoa(RepositorioPessoa repoPessoa){
+        this.repoPessoa = repoPessoa;
+    }
     
     /**
      * Retorna se o motorista já está validado e apto para aceitar corridas
@@ -76,13 +81,6 @@ public class GerenciadorPessoa {
         return motorista;
     }
     
-    /**
-     * Retorna uma lista com os motoristas disponiveis para viagem. Ou seja, que estejam validados e nao estejam em uma corrida.
-     */
-    public void motoristasDisponiveis(){
-        repoPessoa.listarMotoristasDisponiveis();
-    }
-    
     public void removerCliente(String cpf) throws PessoaNaoEncontradaException{
         Cliente clienteEncontrado = repoPessoa.buscarPorCpf(cpf);
         
@@ -101,11 +99,43 @@ public class GerenciadorPessoa {
         repoPessoa.removerMotorista(cnh);
     }
     
-    public void verificaDisponibilidade(Motorista motorista) throws MotoristaNaoDisponivelException{
+    public void verificarDisponibilidade(Motorista motorista) throws MotoristaNaoDisponivelException{
         if(!motorista.isDisponivel()){
             throw new MotoristaNaoDisponivelException("Motorista solicitado esta em outra corrida ou nao disponivel no momento");
         } else{
             motorista.setDisponivel(false);
+        }
+    }
+
+    public void atualizarCliente(String cpf, String email, String telefone) throws PessoaNaoEncontradaException{
+        Cliente cliente = repoPessoa.buscarPorCpf(cpf);
+        if(cliente == null){
+            throw new PessoaNaoEncontradaException("Cliente nao encontrado");
+        }
+        repoPessoa.atualizar(cliente, email, telefone);
+    }
+    
+    public void atualizarMotorista(String cnh, String email, String telefone) throws PessoaNaoEncontradaException{
+        Motorista motorista = repoPessoa.buscarPorCnh(cnh);
+        if(motorista == null){
+            throw new PessoaNaoEncontradaException("Motorista nao encontrado");
+        }
+        repoPessoa.atualizar(motorista, email, telefone);
+    }
+    
+    public void adicionarVeiculoMotorista(Motorista motorista, int idVeiculo) {
+        repoPessoa.atualizarVeiculoDoMotorista(motorista, idVeiculo);
+    }
+    
+    public void verificarValidacaoMotorista(Motorista motorista) throws MotoristaNaoValidadoException{
+        if(!motorista.isValidado()){
+            throw new MotoristaNaoValidadoException("O motorista deve estar validado para aceitar corridas");
+        }
+    }
+    
+    public void verificarVeiculoMotorista(Motorista motorista) throws MotoristaSemVeiculoException{
+        if(motorista.getIdVeiculo()<=0){
+            throw new MotoristaSemVeiculoException("O motorista deve ter um veiculo cadastrado para comecar a trabalhar");
         }
     }
 }

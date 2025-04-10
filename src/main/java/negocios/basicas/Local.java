@@ -14,11 +14,9 @@ public abstract class Local implements Serializable{
     private String cidade;
     private String estado;
 
-    public Local(String nome, int numero, String cidade, String estado) {
+    public Local(String nome, int numero) {
         this.nome = nome;
         this.numero = numero;
-        this.cidade = cidade;
-        this.estado = estado;
     }
 
     public String getNome() {
@@ -27,14 +25,6 @@ public abstract class Local implements Serializable{
 
     public int getNumero() {
         return numero;
-    }
-
-    public String getCidade() {
-        return cidade;
-    }
-
-    public String getEstado() {
-        return estado;
     }
     
 }

@@ -10,11 +10,18 @@ import negocios.basicas.Veiculo;
  * @author Maria Luiza Bezerra
  */
 public class RepositorioVeiculo implements IRepositorioVeiculo {
-    private static final String ARQ_VEICULOS = "veiculos.ser";
+    private static final String PASTA_DADOS = "data/";
+    private static final String ARQ_VEICULOS = PASTA_DADOS+"veiculos.ser";
     private List<Veiculo> veiculos;
+    RepositorioPessoa repoPessoa = new RepositorioPessoa();
 
     public RepositorioVeiculo() {
+        criarPastasDados();
         this.veiculos = carregar();
+    }
+    
+    private void criarPastasDados(){
+        new File (PASTA_DADOS).mkdirs();
     }
     
     private void salvar(){
@@ -40,8 +47,7 @@ public class RepositorioVeiculo implements IRepositorioVeiculo {
     }
 
     @Override
-    public void adicionar(Motorista motorista, Veiculo veiculo) {
-        veiculo.setMotorista(motorista);
+    public void adicionar(Veiculo veiculo) {
         veiculos.add(veiculo);
         salvar();
     }
@@ -55,10 +61,31 @@ public class RepositorioVeiculo implements IRepositorioVeiculo {
         }
         return null;
     }
+    
+    @Override
+    public Veiculo buscarPorId(int id){
+        for(Veiculo v : veiculos){
+            if(v.getId() == id){
+                return v;
+            }
+        }
+        return null;
+    }
 
     public void remover(String placa) {
         Veiculo veiculo = buscarPorPlaca(placa);
         veiculos.remove(veiculo);
         salvar();
+    }
+    
+    public void listarVeiculos(){
+        System.out.println("VEICULOS");
+        for(Veiculo vc: veiculos){
+            System.out.println("Id do veiculo: "+vc.getId());
+            System.out.println("Placa: "+vc.getPlaca());
+            System.out.println("Modelo: "+vc.getModelo());
+            System.out.println("Categoria: "+vc.getCategoria());
+            System.out.println("Motorista id: "+vc.getIdMotorista());
+        }
     }
 }

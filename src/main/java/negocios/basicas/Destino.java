@@ -9,8 +9,8 @@ public class Destino extends Local implements Serializable{
 
     private static final long serialVersionUID = 8154835401067621888L;
 
-    public Destino(String nome, int numero, String cidade, String estado) {
-        super(nome, numero, cidade, estado);
+    public Destino(String nome, int numero) {
+        super(nome, numero);
     }
 
 }

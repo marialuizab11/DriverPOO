@@ -25,6 +25,6 @@ public interface IRepositorioPessoa {
     void removerMotorista(String cpf);    
     
     Pessoa buscarPorCpf(String cpf);    
-    boolean atualizar(String cpf, String email, String telefone);
+    void atualizar(Pessoa pessoa, String email, String telefone);
    
 }

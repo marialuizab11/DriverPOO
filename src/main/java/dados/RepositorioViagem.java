@@ -11,10 +11,16 @@ import negocios.basicas.Viagem;
 public class RepositorioViagem implements IRepositorioViagem {
     private List<Viagem> viagens;
     
-    private static final String ARQ_VIAGENS = "viagens.ser";
+    private static final String PASTA_DADOS = "data/";
+    private static final String ARQ_VIAGENS = PASTA_DADOS+"viagens.ser";
 
     public RepositorioViagem() {
+        criarPastasDados();
         this.viagens = carregar();
+    }
+    
+     private void criarPastasDados(){
+        new File (PASTA_DADOS).mkdirs();
     }
     
     private List<Viagem> carregar(){
@@ -56,4 +62,28 @@ public class RepositorioViagem implements IRepositorioViagem {
         return null;
     }
     
+    public List<Viagem> getTodas(){
+        return viagens;
+    }
+    
+    public void viagensNaoAceitas(){
+        for(Viagem vg : viagens){
+            if(!vg.isAceita()){
+                System.out.println("ID: "+vg.getId());
+                System.out.println("Origem: "+vg.getOrigem());
+                System.out.println("Destino: "+vg.getDestino());
+            }
+        }
+    }
+    
+    public void listarViagens(){
+        System.out.println("VIAGENS");
+        for (Viagem vg: viagens){
+            
+            System.out.println("Categoria: "+vg.getCategoriaVeiculo());
+            System.out.println("Aceita: "+vg.isAceita());
+            System.out.println("Valor: "+vg.getValorTotal());
+            
+        }
+    }
 }

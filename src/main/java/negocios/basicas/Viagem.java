@@ -15,15 +15,41 @@ public abstract class Viagem implements Serializable {
     private Destino destino;
     private Motorista motorista;
     private Veiculo veiculo;
+    private boolean aceita;
+    private String categoriaVeiculo;
+    private double valorTotal;
 
-    public Viagem(Origem origem, Destino destino, Motorista motorista, Veiculo veiculo) {
+    public Viagem(Origem origem, Destino destino, Motorista motorista, Veiculo veiculo, String categoria, double valorTotal) {
         this.origem = origem;
         this.destino = destino;
         this.motorista = motorista;
         this.veiculo = veiculo;
+        this.aceita = false;
+        this.categoriaVeiculo = categoria;
+        this.valorTotal = valorTotal;
         this.id = proximoId++;
     }
 
+    public double getValorTotal() {
+        return valorTotal;
+    }
+
+    public String getCategoriaVeiculo() {
+        return categoriaVeiculo;
+    }
+
+    public void setCategoriaVeiculo(String categoriaVeiculo) {
+        this.categoriaVeiculo = categoriaVeiculo;
+    }    
+    
+    public boolean isAceita(){
+        return aceita;
+    }
+
+    public void setAceita(boolean aceita){
+        this.aceita = aceita;
+    }
+    
     public int getId() {
         return id;
     }

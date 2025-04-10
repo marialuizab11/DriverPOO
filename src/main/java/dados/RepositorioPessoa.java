@@ -3,6 +3,7 @@ package dados;
 import java.io.*;
 import java.util.*;
 import negocios.basicas.*;
+import negocios.excecoes.MotoristaNaoDisponivelException;
 import negocios.excecoes.PessoaNaoEncontradaException;
 
 /**
@@ -52,10 +53,8 @@ public class RepositorioPessoa implements IRepositorioPessoa {
 
     @Override
     public void adicionarCliente(Cliente cliente) {
-        if(cliente!=null && !existePessoa(cliente.getCpf())){
-            clientes.add(cliente);
-            salvarDados();
-        }
+        clientes.add(cliente);
+        salvarDados();
     }
 
     @Override
@@ -70,10 +69,8 @@ public class RepositorioPessoa implements IRepositorioPessoa {
 
     @Override
     public void adicionarMotorista(Motorista motorista) {
-        if(motorista != null && !existePessoa(motorista.getCpf())){
-            motoristas.add(motorista);
-            salvarDados();
-        }
+        motoristas.add(motorista);
+        salvarDados();
     }
 
     @Override
@@ -86,17 +83,20 @@ public class RepositorioPessoa implements IRepositorioPessoa {
         return null;
     }
 
-    @Override
-    public boolean atualizar(String cpf, String email, String telefone) {
-        Pessoa pessoa = buscarPorCpf(cpf);
-        if(pessoa!=null){
-            pessoa.setEmail(email);
-            pessoa.setTelefone(telefone);
-            salvarDados();
-            return true;
-        } else{
-            return false;
+    public Motorista buscarPorId(int id){
+        for(Motorista mt: motoristas){
+            if(mt.getId() == id){
+                return mt;
+            }
         }
+        return null;
+    }
+    
+    @Override
+    public void atualizar(Pessoa pessoa, String email, String telefone) {
+        pessoa.setEmail(email);
+        pessoa.setTelefone(telefone);
+        salvarDados();
     }
     
     public void atualizarValidacao(Motorista motorista) throws PessoaNaoEncontradaException {
@@ -116,37 +116,49 @@ public class RepositorioPessoa implements IRepositorioPessoa {
         encontrado.setDisponivel(disponibilidade);
         salvarDados();
     }
+    
+    public void atualizarVeiculoDoMotorista(Motorista motorista, int idVeiculo){
+        motorista.setIdVeiculo(idVeiculo);
+        salvarDados();
+    }
 
     @Override
     public void removerCliente(String cpf) {
         Pessoa pessoa = buscarPorCpf(cpf);
         clientes.remove(pessoa);
-            salvarDados();
-    }
-    
-    @Override
-    public void removerMotorista(String cpf){
-        Pessoa pessoa = buscarPorCpf(cpf);
-        motoristas.remove(pessoa);
         salvarDados();
     }
     
-    private boolean existePessoa(String cpf){
-        return buscarPorCpf(cpf)!=null;
+    @Override
+    public void removerMotorista(String cnh){
+        Motorista motorista = buscarPorCnh(cnh);
+        if (motorista!=null){
+            motoristas.remove(motorista);
+            salvarDados();
+        }
     }
     
-    /**
-     * Lista todos os motoristas disponiveis para viagem. Isso significa que eles tem que estar disponivel e validado no sistema.
-     * 
-     */
-    public void listarMotoristasDisponiveis(){
-        if(motoristas.isEmpty()){
-            System.out.println("Ainda nao ha motoristas cadastrados");
+    public void listarMotoristas(){
+        System.out.println("MOTORISTAS");
+        for (Motorista mt: motoristas){
+            System.out.println("ID: "+mt.getId());
+            System.out.println("Nome: "+mt.getNome());
+            System.out.println("CNH: "+mt.getCnh());
+            System.out.println("email: "+mt.getEmail());
+            System.out.println("cpf: "+mt.getCpf());
+            System.out.println("Id veiculo: "+mt.getIdVeiculo()+"\n");
         }
-        for(Motorista mt : motoristas){
-            if(mt.isDisponivel() && mt.isValidado()){
-                System.out.println("Nome: "+mt.getNome());
-            }
+    }
+    
+    public void listarClientes(){
+        System.out.println("\nCLIENTES");
+        for(Cliente cl : clientes){
+            System.out.println("Nome: "+cl.getNome());    
+            System.out.println("Cpf: "+cl.getCpf());
+            System.out.println("Telefone: "+cl.getTelefone());
+            System.out.println("Email: "+cl.getEmail()+"\n");
+            
+            
         }
     }
 }

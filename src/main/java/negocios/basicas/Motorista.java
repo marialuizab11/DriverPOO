@@ -11,7 +11,7 @@ public class Motorista extends Pessoa implements Serializable{
 
     private static final long serialVersionUID = 1675543234322004727L;
     private String cnh;
-    private Veiculo veiculo;
+    private int idVeiculo;
     private boolean validado;
     private boolean disponivel;
         
@@ -28,6 +28,14 @@ public class Motorista extends Pessoa implements Serializable{
         this.cnh = cnh;
         this.validado = false;
         this.disponivel = true;
+    }
+
+    public int getIdVeiculo() {
+        return idVeiculo;
+    }
+
+    public void setIdVeiculo(int idVeiculo) {
+        this.idVeiculo = idVeiculo;
     }
 
     public boolean isValidado() {
@@ -49,6 +57,5 @@ public class Motorista extends Pessoa implements Serializable{
     public void setDisponivel(boolean disponivel) {
         this.disponivel = disponivel;
     }
-    
-    
+
 }

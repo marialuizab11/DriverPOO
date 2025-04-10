@@ -9,8 +9,8 @@ public class Origem extends Local implements Serializable {
 
     private static final long serialVersionUID = -4605097207754933956L;
 
-    public Origem(String nome, int numero, String cidade, String estado) {
-        super(nome, numero, cidade, estado);
+    public Origem(String nome, int numero) {
+        super(nome, numero);
     }
 
 }
