@@ -4,7 +4,7 @@ import negocios.basicas.Motorista;
 import negocios.basicas.Veiculo;
 
 /**
- * Define as operacoes que o veiculo pode ter no sistema.
+ * Define o contrato para as operacoes que Veiculo tem no sistema.
  * 
  * @author Maria Luiza Bezerra
  */

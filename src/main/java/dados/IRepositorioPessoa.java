@@ -3,21 +3,12 @@ package dados;
 import negocios.basicas.*;
 
 /**
- * Define as operacoes que as pessoas podem fazer no sistema
+ * Define o contrato para as acoes que Pessoas tem no sistema.
  *
  * @author Maria Luiza Bezerra
  */
 public interface IRepositorioPessoa {
-    /**
-     * Adiciona um cliente ao sistema
-     * @param cliente objeto cliente
-     */
     void adicionarCliente(Cliente cliente);
-    
-    /**
-     * 
-     * @param cpf 
-     */
     void removerCliente(String cpf);
     
     void adicionarMotorista(Motorista motorista);

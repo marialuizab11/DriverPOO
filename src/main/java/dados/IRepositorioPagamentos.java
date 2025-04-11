@@ -3,7 +3,7 @@ package dados;
 import negocios.basicas.FormaDePagamento;
 
 /**
- * Define as operacoes para as formas de pagamento. 
+ * Define o contrato para as operacoes das formas de pagamento. 
  *  
  * @author Maria Luiza Bezerra
  */

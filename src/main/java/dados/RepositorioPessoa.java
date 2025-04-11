@@ -3,10 +3,10 @@ package dados;
 import java.io.*;
 import java.util.*;
 import negocios.basicas.*;
-import negocios.excecoes.MotoristaNaoDisponivelException;
-import negocios.excecoes.PessoaNaoEncontradaException;
 
 /**
+ * Implemetacao concreta de {@link IRepositorioPessoa} para operacoes de pessoas (Cliente, Motorista) com persistencia em arquivos.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class RepositorioPessoa implements IRepositorioPessoa {
@@ -19,16 +19,28 @@ public class RepositorioPessoa implements IRepositorioPessoa {
     private static final String ARQ_CLIENTES = PASTA_DADOS + "clientes.ser";
     private static final String ARQ_MOTORISTAS = PASTA_DADOS + "motoristas.ser";
 
+    /**
+     * Constroi um novo repositorio, inicializando as estruturas de dados e carregando os dados persistentes se existirem.
+     */
     public RepositorioPessoa(){
         criarPastasDados();
         this.clientes = carregar(ARQ_CLIENTES);
         this.motoristas = carregar(ARQ_MOTORISTAS);
     }
     
+    /**
+     * Cria a estrutura de diretorios de armazenamento necessaria.
+     */
     private void criarPastasDados(){
         new File (PASTA_DADOS).mkdirs();
     }
     
+    /**
+     * Carrega uma lista de objetos do arquivo especificado.
+     * @param <T> Tipo generico dos objetos a serem carregados
+     * @param caminho Caminho completo do arquivo a ser carregado
+     * @return Lista contendo os objetos carregados, ou uma lista vazia se o arquivo nao existir.
+     */   
     @SuppressWarnings("unchecked")
     private <T> List<T> carregar(String caminho){
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(caminho))){
@@ -38,6 +50,12 @@ public class RepositorioPessoa implements IRepositorioPessoa {
         }
     }
     
+    /**
+     * Persiste uma lista de objetos no arquivo especificado.
+     * @param <T> Tipo generico dos objetos a serem persistidos
+     * @param lista lista de objetos a serem salvos
+     * @param caminho Caminho completo do arquivo de destino
+     */
     private <T> void salvar(List<T> lista, String caminho){
         try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(caminho))){
             out.writeObject(lista);
@@ -46,17 +64,29 @@ public class RepositorioPessoa implements IRepositorioPessoa {
         }
     }
     
+    /**
+     * Salva todas as alteracoes feitas no repositorio.
+     */
     private void salvarDados(){
         salvar(clientes, ARQ_CLIENTES);
         salvar(motoristas, ARQ_MOTORISTAS);
     }
 
+    /**
+     * Adiciona um novo cliente.
+     * @param cliente Objeto cliente (nao-nulo) a ser adicionado
+     */
     @Override
     public void adicionarCliente(Cliente cliente) {
         clientes.add(cliente);
         salvarDados();
     }
 
+    /**
+     * Busca um cliente pelo cpf.
+     * @param cpf
+     * @return O cliente encontrado ou null se o cpf nao estiver cadastrado.
+     */
     @Override
     public Cliente buscarPorCpf(String cpf) {
         for (Cliente cl : clientes){
@@ -67,12 +97,21 @@ public class RepositorioPessoa implements IRepositorioPessoa {
         return null;
     }
 
+    /**
+     * Adiciona um novo motorista.
+     * @param motorista Objeto motorista (nao-nulo) a ser adicionado
+     */
     @Override
     public void adicionarMotorista(Motorista motorista) {
         motoristas.add(motorista);
         salvarDados();
     }
 
+    /**
+     * Busca um motorista pela sua cnh.
+     * @param cnh 
+     * @return O motorista encontrado ou nulo se a cnh nao estiver cadastrada.
+     */
     @Override
     public Motorista buscarPorCnh(String cnh) {
         for(Motorista mt: motoristas){
@@ -82,16 +121,13 @@ public class RepositorioPessoa implements IRepositorioPessoa {
         }
         return null;
     }
-
-    public Motorista buscarPorId(int id){
-        for(Motorista mt: motoristas){
-            if(mt.getId() == id){
-                return mt;
-            }
-        }
-        return null;
-    }
     
+    /**
+     * Atualiza informacoes de contato de uma pessoa.
+     * @param pessoa 
+     * @param email
+     * @param telefone 
+     */
     @Override
     public void atualizar(Pessoa pessoa, String email, String telefone) {
         pessoa.setEmail(email);
@@ -99,29 +135,30 @@ public class RepositorioPessoa implements IRepositorioPessoa {
         salvarDados();
     }
     
-    public void atualizarValidacao(Motorista motorista) throws PessoaNaoEncontradaException {
+    /**
+     * Atualiza o status de validacao de um motorista.
+     * @param motorista 
+     */
+    public void atualizarValidacao(Motorista motorista) {
         Motorista encontrado = buscarPorCnh(motorista.getCnh());
-        if (encontrado == null) {
-            throw new PessoaNaoEncontradaException("Motorista não encontrado!");
-        }
         encontrado.setValidado(true);
         salvarDados();
     }
     
-    public void atualizarDisponibilidade(Motorista motorista, boolean disponibilidade){
-        Motorista encontrado = buscarPorCnh(motorista.getCnh());
-        if (encontrado == null) {
-            throw new PessoaNaoEncontradaException("Motorista não encontrado!");
-        }
-        encontrado.setDisponivel(disponibilidade);
-        salvarDados();
-    }
-    
+    /**
+     * Atualiza o motorista com o Id do veiculo dele para que seja feita o referenciamento.
+     * @param motorista
+     * @param idVeiculo 
+     */
     public void atualizarVeiculoDoMotorista(Motorista motorista, int idVeiculo){
         motorista.setIdVeiculo(idVeiculo);
         salvarDados();
     }
 
+    /**
+     * Remove um cliente do sistema.
+     * @param cpf 
+     */
     @Override
     public void removerCliente(String cpf) {
         Pessoa pessoa = buscarPorCpf(cpf);
@@ -129,36 +166,16 @@ public class RepositorioPessoa implements IRepositorioPessoa {
         salvarDados();
     }
     
+    /**
+     * Remove um motorista do sistema.
+     * @param cnh 
+     */
     @Override
     public void removerMotorista(String cnh){
         Motorista motorista = buscarPorCnh(cnh);
         if (motorista!=null){
             motoristas.remove(motorista);
             salvarDados();
-        }
-    }
-    
-    public void listarMotoristas(){
-        System.out.println("MOTORISTAS");
-        for (Motorista mt: motoristas){
-            System.out.println("ID: "+mt.getId());
-            System.out.println("Nome: "+mt.getNome());
-            System.out.println("CNH: "+mt.getCnh());
-            System.out.println("email: "+mt.getEmail());
-            System.out.println("cpf: "+mt.getCpf());
-            System.out.println("Id veiculo: "+mt.getIdVeiculo()+"\n");
-        }
-    }
-    
-    public void listarClientes(){
-        System.out.println("\nCLIENTES");
-        for(Cliente cl : clientes){
-            System.out.println("Nome: "+cl.getNome());    
-            System.out.println("Cpf: "+cl.getCpf());
-            System.out.println("Telefone: "+cl.getTelefone());
-            System.out.println("Email: "+cl.getEmail()+"\n");
-            
-            
         }
     }
 }
