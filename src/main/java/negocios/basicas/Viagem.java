@@ -19,6 +19,8 @@ public abstract class Viagem implements Serializable {
     private boolean aceita;
     private String categoriaVeiculo;
     private double valorTotal;
+    private Avaliacao avaliacaoCliente;
+    private Avaliacao avaliacaoMotorista;
 
     public Viagem(Origem origem, Destino destino, Motorista motorista, Veiculo veiculo, Cliente cliente, String categoria, double valorTotal) {
         this.origem = origem;
@@ -29,8 +31,28 @@ public abstract class Viagem implements Serializable {
         this.aceita = false;
         this.categoriaVeiculo = categoria;
         this.valorTotal = valorTotal;
+        this.avaliacaoCliente = null;
+        this.avaliacaoMotorista = null;
         this.id = proximoId++;
     }
+
+    public void setAvaliacaoCliente(Avaliacao avaliacaoCliente) {
+        this.avaliacaoCliente = avaliacaoCliente;
+    }
+
+    public void setAvaliacaoMotorista(Avaliacao avaliacaoMotorista) {
+        this.avaliacaoMotorista = avaliacaoMotorista;
+    }
+
+    public Avaliacao getAvaliacaoCliente() {
+        return avaliacaoCliente;
+    }
+
+    public Avaliacao getAvaliacaoMotorista() {
+        return avaliacaoMotorista;
+    }
+    
+    
 
     public Cliente getCliente() {
         return cliente;

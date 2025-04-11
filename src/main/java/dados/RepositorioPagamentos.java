@@ -11,7 +11,8 @@ public class RepositorioPagamentos implements IRepositorioPagamentos {
     private Map<String, FormaDePagamento> pagamentos;
     private Pix pix;
     
-    private static final String ARQ_PAGAMENTOS = "pagamentos.ser";
+    private static final String PASTA_DADOS = "data/"; 
+    private static final String ARQ_PAGAMENTOS = PASTA_DADOS + "pagamentos.ser";
 
     public RepositorioPagamentos() {
         criarPastaDados();

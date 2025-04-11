@@ -84,8 +84,7 @@ public class GerenciadorViagem {
         System.out.println(viagem.getDestino().getNome());
     }
     
-    public void encerrarViagem(Viagem viagem, int estrelas, String descricao){
-        Avaliacao avaliacao = new Avaliacao(descricao, estrelas);
+    public void encerrarViagem(Viagem viagem){
         viagem.getMotorista().setDisponivel(true);
     }
     
@@ -99,9 +98,7 @@ public class GerenciadorViagem {
         return disponiveis;
     }
     
-    public boolean mostrarViagensDisponiveisParaMotoristas(String cnh) {
-        Motorista motorista = gerenciadorPessoa.buscarMotorista(cnh);
-        
+    public boolean mostrarViagensDisponiveisParaMotoristas(Motorista motorista) {        
         gerenciadorPessoa.verificarValidacaoMotorista(motorista);
         gerenciadorPessoa.verificarVeiculoMotorista(motorista);
         
@@ -123,5 +120,30 @@ public class GerenciadorViagem {
             }
         }
         return true;
+    }
+    
+    public void avaliarMotorista(int id, int estrelas, String descricao){
+        Viagem viagem = repoViagem.buscarViagem(id);
+        Avaliacao avaliacaoCliente = new Avaliacao(descricao, estrelas);
+        repoViagem.adicionarAvaliacaoCliente(viagem, avaliacaoCliente);
+    }
+    
+    public void avaliarCliente(Viagem viagem, int estrelas, String descricao){
+        Avaliacao avaliacaoMotorista = new Avaliacao(descricao, estrelas);
+        repoViagem.adicionarAvaliacaoMotorista(viagem, avaliacaoMotorista);
+    }
+    
+    public void mostrarViagensDeMotorista(Motorista motorista) throws PessoaSemViagensException{
+        boolean temViagens = repoViagem.listarViagensDeMotorista(motorista);
+        if(!temViagens){
+            throw new PessoaSemViagensException("Motorista ainda nao realizou nenhuma viagem");
+        }
+    }
+    
+    public void mostrarViagensFeitasCliente(Cliente cliente) throws PessoaSemViagensException{
+        boolean temViagens = repoViagem.listarViagensFeitasDeCliente(cliente);
+        if(!temViagens){
+            throw new PessoaSemViagensException("Cliente nao fez nenhuma viagem");
+        }
     }
 }

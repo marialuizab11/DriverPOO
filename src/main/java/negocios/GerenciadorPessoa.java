@@ -34,16 +34,14 @@ public class GerenciadorPessoa {
      * @param cpf cpf do motorista
      * @throws PessoaNaoEncontradaException lançado quando o motorista nao estiver no sistema
      */
-    public void validarMotorista(String cnh, String email, String cpf) throws PessoaNaoEncontradaException{
-        Motorista motoristaEncontrado = repoPessoa.buscarPorCnh(cnh);
-        
-        if(!motoristaEncontrado.getEmail().equalsIgnoreCase(email)){
+    public void validarMotorista(Motorista motorista, String email, String cpf) throws PessoaNaoEncontradaException{
+        if(!motorista.getEmail().equalsIgnoreCase(email)){
             throw new PessoaNaoEncontradaException("Email nao corresponde");
         }
-        if(!motoristaEncontrado.getCpf().equals(cpf)){
+        if(!motorista.getCpf().equals(cpf)){
             throw new PessoaNaoEncontradaException("CPF nao corresponde");
         }
-        repoPessoa.atualizarValidacao(motoristaEncontrado);
+        repoPessoa.atualizarValidacao(motorista);
     }
     
     /**
@@ -85,13 +83,11 @@ public class GerenciadorPessoa {
         return motorista;
     }
     
-    public void removerCliente(String cpf) throws PessoaNaoEncontradaException{
-        Cliente clienteEncontrado = repoPessoa.buscarPorCpf(cpf);
-        
-        if(clienteEncontrado == null){
+    public void removerCliente(Cliente cliente) throws PessoaNaoEncontradaException{
+        if(cliente == null){
             throw new PessoaNaoEncontradaException("Cliente nao encontrado");
         }        
-        repoPessoa.removerCliente(cpf);
+        repoPessoa.removerCliente(cliente.getCpf());
     }
     
     public void removerMotorista(String cnh) throws PessoaNaoEncontradaException {
@@ -111,8 +107,7 @@ public class GerenciadorPessoa {
         }
     }
 
-    public void atualizarCliente(String cpf, String email, String telefone) throws PessoaNaoEncontradaException{
-        Cliente cliente = repoPessoa.buscarPorCpf(cpf);
+    public void atualizarCliente(Cliente cliente, String email, String telefone) throws PessoaNaoEncontradaException{
         if(cliente == null){
             throw new PessoaNaoEncontradaException("Cliente nao encontrado");
         }

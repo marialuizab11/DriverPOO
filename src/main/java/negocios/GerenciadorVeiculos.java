@@ -22,9 +22,8 @@ public class GerenciadorVeiculos {
         }
     }
     
-    public void cadastrarMotocicleta(String cnh, String placa, int capacidade, String modelo){  
+    public void cadastrarMotocicleta(Motorista motorista, String placa, int capacidade, String modelo){  
         try{
-            Motorista motorista = gerenciadorPessoa.buscarMotorista(cnh);
             Motocicleta moto = new Motocicleta(placa, capacidade, modelo, motorista.getId());
             verificarExistencia(moto);
             
@@ -36,9 +35,8 @@ public class GerenciadorVeiculos {
         }        
     }
     
-    public void cadastrarSUV(String cnh, String placa, int capacidade, String modelo){  
+    public void cadastrarSUV(Motorista motorista, String placa, int capacidade, String modelo){  
         try{
-            Motorista motorista = gerenciadorPessoa.buscarMotorista(cnh);
             SUV suv = new SUV(placa, capacidade, modelo, motorista.getId());
             verificarExistencia(suv);
             
@@ -50,9 +48,8 @@ public class GerenciadorVeiculos {
         }        
     }
     
-    public void cadastrarLuxo(String cnh, String placa, int capacidade, String modelo){  
+    public void cadastrarLuxo(Motorista motorista, String placa, int capacidade, String modelo){  
         try{
-            Motorista motorista = gerenciadorPessoa.buscarMotorista(cnh);
             Luxo luxo = new Luxo(placa, capacidade, modelo, motorista.getId());
             verificarExistencia(luxo);
             
@@ -64,9 +61,8 @@ public class GerenciadorVeiculos {
         }        
     }
     
-    public void cadastrarEconomico(String cnh, String placa, int capacidade, String modelo){  
+    public void cadastrarEconomico(Motorista motorista, String placa, int capacidade, String modelo){  
         try{
-            Motorista motorista = gerenciadorPessoa.buscarMotorista(cnh);
             Economico economico = new Economico(placa, capacidade, modelo, motorista.getId());
             verificarExistencia(economico);
             

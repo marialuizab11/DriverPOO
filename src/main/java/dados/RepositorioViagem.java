@@ -66,20 +66,9 @@ public class RepositorioViagem implements IRepositorioViagem {
         return viagens;
     }
     
-    public void viagensNaoAceitas(){
-        for(Viagem vg : viagens){
-            if(!vg.isAceita()){
-                System.out.println("ID: "+vg.getId());
-                System.out.println("Origem: "+vg.getOrigem());
-                System.out.println("Destino: "+vg.getDestino());
-            }
-        }
-    }
-    
     public void listarViagens(){
         System.out.println("VIAGENS");
         for (Viagem vg: viagens){
-            
             System.out.println("Categoria: "+vg.getCategoriaVeiculo());
             System.out.println("Aceita: "+vg.isAceita());
             System.out.println("Valor: "+vg.getValorTotal());
@@ -88,10 +77,61 @@ public class RepositorioViagem implements IRepositorioViagem {
         }
     }
     
+    public boolean listarViagensDeMotorista(Motorista motorista){
+        System.out.println("\nViagens de "+motorista.getNome());
+        boolean temViagens = false;
+        for (Viagem vg: viagens){
+            if(vg.getMotorista() != null && vg.getMotorista().equals(motorista)){
+                System.out.println("Valor: "+vg.getValorTotal());
+                System.out.println("Cliente: "+vg.getCliente().getNome());
+                if(vg.getAvaliacaoCliente()!=null){
+                    System.out.println("Avaliacao do cliente:");           
+                    System.out.println("Estrelas: "+vg.getAvaliacaoCliente().getEstrelas());
+                    System.out.println("Descricao: "+vg.getAvaliacaoCliente().getDescricao());
+                } else{
+                    System.out.println("Cliente nao avaliou a corrida");
+                }
+                temViagens = true;
+            }
+        }
+        return temViagens;
+    }
+    
+    public boolean listarViagensFeitasDeCliente(Cliente cliente){
+        System.out.println("\nViagens de "+cliente.getNome());
+        boolean temViagens = false;
+        for (Viagem vg: viagens){
+            if(vg.getCliente() != null && vg.getCliente().equals(cliente) && vg.isAceita() && vg.getAvaliacaoCliente() == null){
+                System.out.println("ID: "+vg.getId());
+                System.out.println("Valor: "+vg.getValorTotal());
+                System.out.println("Motorista: "+vg.getMotorista().getNome());
+                if(vg.getAvaliacaoMotorista()!=null){
+                    System.out.println("Avaliacao do motorista:");           
+                    System.out.println("Estrelas: "+vg.getAvaliacaoMotorista().getEstrelas());
+                    System.out.println("Descricao: "+vg.getAvaliacaoMotorista().getDescricao());
+                } else{
+                    System.out.println("Motorista nao avaliou a corrida");
+                }
+                temViagens = true;
+            }
+        }
+        return temViagens;
+    }
+    
     public void aceitarViagem(Viagem viagem, Motorista motorista, Veiculo veiculo){
         viagem.setAceita(true);
         viagem.setMotorista(motorista);
         viagem.setVeiculo(veiculo);
+        salvar();
+    }
+    
+    public void adicionarAvaliacaoCliente(Viagem viagem, Avaliacao avaliacaoCliente){
+        viagem.setAvaliacaoCliente(avaliacaoCliente);
+        salvar();
+    }
+    
+    public void adicionarAvaliacaoMotorista(Viagem viagem, Avaliacao avaliacaoMotorista){
+        viagem.setAvaliacaoMotorista(avaliacaoMotorista);
         salvar();
     }
 }
