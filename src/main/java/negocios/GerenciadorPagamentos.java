@@ -33,9 +33,4 @@ public class GerenciadorPagamentos {
     public void cadastrarPagamento(String idViagem, FormaDePagamento pagamento){
         repoPagamentos.adicionar(idViagem, pagamento);
     }
-    
-    public void pagarComDinheiro(double valor){
-        System.out.println("== PAGUE DIRETAMENTE AO MOTORISTA ==");
-        System.out.println("valor: R$"+valor);
-    }
 }

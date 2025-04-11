@@ -3,7 +3,7 @@ package dados;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import negocios.basicas.Viagem;
+import negocios.basicas.*;
 
 /**
  * @author Maria Luiza Bezerra
@@ -83,7 +83,15 @@ public class RepositorioViagem implements IRepositorioViagem {
             System.out.println("Categoria: "+vg.getCategoriaVeiculo());
             System.out.println("Aceita: "+vg.isAceita());
             System.out.println("Valor: "+vg.getValorTotal());
+            System.out.println("Cliente: "+vg.getCliente().getNome());
             
         }
+    }
+    
+    public void aceitarViagem(Viagem viagem, Motorista motorista, Veiculo veiculo){
+        viagem.setAceita(true);
+        viagem.setMotorista(motorista);
+        viagem.setVeiculo(veiculo);
+        salvar();
     }
 }

@@ -46,7 +46,7 @@ public class RepositorioPagamentos implements IRepositorioPagamentos {
     }
     
     public String gerarPix(double valor){
-        return pix.getQrCodeGerado()+valor;
+        return UUID.randomUUID().toString()+"DRIVERPOO-COMPANY"+valor;
     }
     
 }

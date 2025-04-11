@@ -11,8 +11,8 @@ public class ViagemEntrega extends Viagem implements Serializable {
     
     private double pesoPacoteKg;
     
-    public ViagemEntrega(Origem origem, Destino destino, Motorista motorista, Veiculo veiculo, String categoria, double valorTotal, double pesoPacoteKg) {
-        super(origem, destino, motorista, veiculo, categoria, valorTotal);
+    public ViagemEntrega(Origem origem, Destino destino, Motorista motorista, Veiculo veiculo, Cliente cliente, String categoria, double valorTotal, double pesoPacoteKg) {
+        super(origem, destino, motorista, veiculo, cliente, categoria, valorTotal);
         this.pesoPacoteKg = pesoPacoteKg;
     }
 

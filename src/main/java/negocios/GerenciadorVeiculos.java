@@ -86,4 +86,17 @@ public class GerenciadorVeiculos {
         repoVeiculos.remover(placa);
     }
     
+    public String verificarCategoria(int opVeiculo) throws CategoriaVeiculoNaoValidaException{
+        String categoria;
+        switch (opVeiculo) {
+            case 1 -> categoria = "MOTOCICLETA";
+            case 2 -> categoria = "ECONOMICO";
+            case 3 -> categoria = "SUV";
+            case 4 -> categoria = "LUXO";
+            default -> throw new CategoriaVeiculoNaoValidaException("Categoria de veiculo nao valida.");
+        }
+        
+        return categoria;
+    }
+    
 }

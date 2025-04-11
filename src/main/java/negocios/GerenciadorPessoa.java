@@ -69,8 +69,12 @@ public class GerenciadorPessoa {
         repoPessoa.adicionarCliente(new Cliente(nome, email, telefone, cpf));    
     }
     
-    public Cliente buscarCliente(String cpf){
-        return repoPessoa.buscarPorCpf(cpf);
+    public Cliente buscarCliente(String cpf) throws PessoaNaoEncontradaException{
+        Cliente cliente = repoPessoa.buscarPorCpf(cpf);
+        if(cliente==null){
+            throw new PessoaNaoEncontradaException("Cpf nao cadastrado no sistema.");
+        }
+        return cliente;
     }
     
     public Motorista buscarMotorista(String cnh) throws PessoaNaoEncontradaException{
@@ -138,4 +142,6 @@ public class GerenciadorPessoa {
             throw new MotoristaSemVeiculoException("O motorista deve ter um veiculo cadastrado para comecar a trabalhar");
         }
     }
+    
+    
 }

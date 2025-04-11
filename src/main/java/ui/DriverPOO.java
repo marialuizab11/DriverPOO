@@ -52,7 +52,7 @@ public class DriverPOO {
                         System.out.println("2 - Atualizar informacoes de cliente");
                         System.out.println("3 - Excluir conta de cliente");
                         System.out.println("4 - Solicitar viagem de entrega");
-                        System.out.println("5 - Solicitar viagem de corrida");
+                        System.out.println("5 - Solicitar corrida");
                         System.out.println("99 - Voltar para login");
                         op = ent.nextInt();
                         ent.nextLine();
@@ -101,11 +101,17 @@ public class DriverPOO {
                                 
                                 System.out.println("SOLICITAR ENTREGA");
                                 
+                                System.out.println("Digite seu cpf: ");
+                                cpf = ent.nextLine();
+                                Cliente cliente = gerenciadorPessoa.buscarCliente(cpf);
+                                
                                 System.out.println("Escolha a categoria de veiculo que voce quer fazer a corrida:");
-                                System.out.println("Motocicleta\nEconomico\nSUV\nLuxo");
-                                System.out.println("\nATENCAO! Entregas com mais de 5kg nao sao aceitas para moto");
-                                String opVeiculo = ent.nextLine();
-                                                                
+                                System.out.println("1 - Motocicleta\n2 - Economico\n3 - SUV\n4 - Luxo");
+                                System.out.println("\n   ATENCAO! Entregas com mais de 5kg nao sao aceitas para moto");
+                                int opVeiculo = ent.nextInt();
+                                ent.nextLine();
+                                String categoria = gerenciadorVeiculos.verificarCategoria(opVeiculo);
+                                
                                 System.out.print("Nome da rua de origem: ");
                                 nomeRuaOrigem = ent.nextLine();
                                 System.out.print("Numero da origem: ");
@@ -120,19 +126,73 @@ public class DriverPOO {
                                 ent.nextLine();
                                 Destino destinoEntrega = new Destino(nomeRuaDestino, numDestino);
                                 
-                                System.out.println("Qual peso da entrega em Kg: ");
+                                System.out.println("Peso total da entrega (em KG): ");
                                 double pesoPacoteKg = ent.nextDouble();
                                 
-                                double valor = gerenciadorViagem.solicitarViagemEntrega(origemEntrega, destinoEntrega, pesoPacoteKg, opVeiculo);
-                                System.out.println("Valor total da entrega: "+valor);    
+                                double valorTotal = gerenciadorViagem.calcularValorTotal(categoria);
+                                
+                                System.out.println("Valor total da entrega: "+valorTotal);    
+                                
+                                System.out.println("Escolha o metodo de pagamento: ");
+                                System.out.println("1 - PIX\n2 - Cartao de Credito\n3 - Dinheiro (em especie)");
+                                int opPagamento = ent.nextInt();
+                                ent.nextLine();
+                                 
+                                if(opPagamento == 1){
+                                    System.out.println("PAGAMENTO POR PIX");
+                                    System.out.println(gerenciadorPagamentos.gerarChavePix(valorTotal));
+                                    System.out.println("Digite 'S' quando o pix for CONCLUIDO. \nDigite 'N' para CANCELAR o pagamento.");
+                                    String opPix = ent.nextLine();
+                                    
+                                    gerenciadorPagamentos.validarPix(opPix);
+                                    Viagem viagemEntrega = gerenciadorViagem.solicitarViagemEntrega(cliente, origemEntrega, destinoEntrega, pesoPacoteKg, categoria);
+                                    gerenciadorViagem.adicionarPagamentoViagem(viagemEntrega.getId(), new Pix(viagemEntrega.getValorTotal()));
+                                    System.out.println("Viagem paga! Esperando algum motorista aceitar...");
+                                } else if(opPagamento == 2){
+                                    System.out.println("PAGAMENTO POR CARTAO DE CREDITO");
+                                    System.out.println("Numero do cartao: ");
+                                    String numeroCartao = ent.nextLine();
+                                    System.out.println("Nome do titular: ");
+                                    String nomeTitular = ent.nextLine();
+                                    System.out.println("Data de vencimento (mm/aa):");
+                                    String dataVencimento = ent.nextLine();
+                                    System.out.println("CVV: ");
+                                    int cvv = ent.nextInt();
+                                    ent.nextLine();
+                                    System.out.println("Limite atual: ");
+                                    double limite = ent.nextDouble();
+                                    ent.nextLine();
+                                    
+                                    gerenciadorPagamentos.debitarCartaoCredito(limite, valorTotal);
+                                    Viagem viagemEntrega = gerenciadorViagem.solicitarViagemEntrega(cliente, origemEntrega, destinoEntrega, pesoPacoteKg, categoria);
+                                    gerenciadorViagem.adicionarPagamentoViagem(viagemEntrega.getId(), new CartaoCredito(nomeTitular, numeroCartao, cvv, dataVencimento, limite, valorTotal));
+                                    System.out.println("Viagem paga com o limite do cartao! Esperando algum motorista aceitar...");
+                                } else if(opPagamento == 3){
+                                    System.out.println("PAGAMENTO POR DINHEIRO EM ESPECIE");
+                                    System.out.println("Ao finalizar a corrida pague R$"+valorTotal+" ao motorista");
+                                    
+                                    Viagem viagemEntrega = gerenciadorViagem.solicitarViagemEntrega(cliente, origemEntrega, destinoEntrega, pesoPacoteKg, categoria);
+                                    gerenciadorViagem.adicionarPagamentoViagem(viagemEntrega.getId(), new Dinheiro(valorTotal));
+                                    System.out.println("Viagem solicitada! Esperando algum motorista aceitar...");
+                                } else{
+                                    System.out.println("Opcao invalida!");
+                                    break;
+                                }
                                 repoViagem.listarViagens();
                                 break;
                             case 5:
                                 System.out.println("SOLICITAR VIAGEM DE CORRIDA");
-                                System.out.println("Escolha a categoria de veiculo que voce quer fazer a corrida:");
-                                System.out.println("Motocicleta\nEconomico\nSUV\nLuxo");
-                                opVeiculo = ent.nextLine();
                                 
+                                System.out.println("Digite seu cpf: ");
+                                cpf = ent.nextLine();
+                                cliente = gerenciadorPessoa.buscarCliente(cpf);
+                                
+                                System.out.println("Escolha a categoria de veiculo que voce quer fazer a corrida:");
+                                System.out.println("1 - Motocicleta\n2 - Economico\n3 - SUV\n4 - Luxo");
+                                opVeiculo = ent.nextInt();
+                                ent.nextLine();
+                                categoria = gerenciadorVeiculos.verificarCategoria(opVeiculo);
+                                System.out.println(categoria);
                                 System.out.print("Nome da rua de origem: ");
                                 nomeRuaOrigem = ent.nextLine();
                                 System.out.print("Numero da origem: ");
@@ -147,9 +207,55 @@ public class DriverPOO {
                                 ent.nextLine();
                                 Destino destinoCorrida = new Destino(nomeRuaDestino, numDestino);
                                 
-                                valor = gerenciadorViagem.solicitarViagemPassageiro(origemCorrida, destinoCorrida, opVeiculo);
+                                valorTotal = gerenciadorViagem.calcularValorTotal(categoria);
                                 
-                                System.out.println("Valor total da viagem: "+valor);
+                                System.out.println("Valor total da corrida: "+valorTotal);    
+                                
+                                System.out.println("Escolha o metodo de pagamento: ");
+                                System.out.println("1 - PIX\n2 - Cartao de Credito\n3 - Dinheiro (em especie)");
+                                opPagamento = ent.nextInt();
+                                ent.nextLine();
+                                
+                                if(opPagamento == 1){
+                                    System.out.println("PAGAMENTO POR PIX");
+                                    System.out.println(gerenciadorPagamentos.gerarChavePix(valorTotal));
+                                    System.out.println("Digite 'S' quando o pix for CONCLUIDO. \nDigite 'N' para CANCELAR o pagamento.");
+                                    String opPix = ent.nextLine();
+                                    
+                                    gerenciadorPagamentos.validarPix(opPix);
+                                    Viagem viagemCorrida = gerenciadorViagem.solicitarViagemPassageiro(cliente, origemCorrida, destinoCorrida, categoria, valorTotal);
+                                    gerenciadorViagem.adicionarPagamentoViagem(viagemCorrida.getId(), new Pix(viagemCorrida.getValorTotal()));
+                                    System.out.println("Viagem paga! Esperando algum motorista aceitar...");
+                                } else if(opPagamento == 2){
+                                    System.out.println("PAGAMENTO POR CARTAO DE CREDITO");
+                                    System.out.println("Numero do cartao: ");
+                                    String numeroCartao = ent.nextLine();
+                                    System.out.println("Nome do titular: ");
+                                    String nomeTitular = ent.nextLine();
+                                    System.out.println("Data de vencimento (mm/aa):");
+                                    String dataVencimento = ent.nextLine();
+                                    System.out.println("CVV: ");
+                                    int cvv = ent.nextInt();
+                                    ent.nextLine();
+                                    System.out.println("Limite atual: ");
+                                    double limite = ent.nextDouble();
+                                    ent.nextLine();
+                                    
+                                    gerenciadorPagamentos.debitarCartaoCredito(limite, valorTotal);
+                                    Viagem viagemCorrida = gerenciadorViagem.solicitarViagemPassageiro(cliente, origemCorrida, destinoCorrida, categoria, valorTotal);
+                                    gerenciadorViagem.adicionarPagamentoViagem(viagemCorrida.getId(), new CartaoCredito(nomeTitular, numeroCartao, cvv, dataVencimento, limite, valorTotal));
+                                    System.out.println("Viagem paga com o limite do cartao! Esperando algum motorista aceitar...");
+                                } else if(opPagamento == 3){
+                                    System.out.println("PAGAMENTO POR DINHEIRO EM ESPECIE");
+                                    System.out.println("Ao finalizar a corrida pague R$"+valorTotal+" ao motorista");
+                                    
+                                    Viagem viagemCorrida = gerenciadorViagem.solicitarViagemPassageiro(cliente, origemCorrida, destinoCorrida, categoria, valorTotal);
+                                    gerenciadorViagem.adicionarPagamentoViagem(viagemCorrida.getId(), new Dinheiro(valorTotal));
+                                    System.out.println("Viagem solicitada! Esperando algum motorista aceitar...");
+                                } else{
+                                    System.out.println("Opcao invalida!");
+                                    break;
+                                }
                                 repoViagem.listarViagens();
                                 break;
                             default:   
@@ -196,7 +302,12 @@ public class DriverPOO {
                                 
                                 System.out.print("Digite sua cnh: ");
                                 cnh = ent.nextLine();
-                                gerenciadorPessoa.buscarMotorista(cnh);
+                                Motorista motorista = gerenciadorPessoa.buscarMotorista(cnh);
+                                
+                                if(motorista.getIdVeiculo()>0){
+                                    System.out.println("O motorista ja tem um veiculo cadastrado. \nRemova o veiculo atual se quiser vincular um novo.");
+                                    break;
+                                }
                                 
                                 System.out.print("Placa do veiculo: ");
                                 String placa = ent.nextLine();
@@ -209,6 +320,7 @@ public class DriverPOO {
                                 System.out.println("Digite em qual categoria seu veiculo vai ser cadastrado: ");
                                 System.out.println("1 - Moto\n2 - Carro Economico\n3 - Carro Luxo\n4 - Carro SUV");
                                 int opVeiculo = ent.nextInt();
+                                ent.nextLine();
                                 
                                 if(opVeiculo == 1){
                                     gerenciadorVeiculos.cadastrarMotocicleta(cnh, placa, capacidade, modelo);
@@ -230,11 +342,10 @@ public class DriverPOO {
                                 System.out.println("EXCLUIR CONTA");
                                 System.out.print("Digite sua cnh: ");
                                 cnh = ent.nextLine();
-                                Motorista motorista = gerenciadorPessoa.buscarMotorista(cnh);
+                                motorista = gerenciadorPessoa.buscarMotorista(cnh);
                                 gerenciadorPessoa.removerMotorista(motorista.getCnh());
                                 
                                 if(motorista.getIdVeiculo()>0){
-                                    System.out.println("Estou no excluir");
                                     Veiculo veiculo = repoVeiculo.buscarPorId(motorista.getIdVeiculo());
                                     gerenciadorVeiculos.excluir(veiculo.getPlaca());
                                 }
@@ -267,11 +378,35 @@ public class DriverPOO {
                                 System.out.println("CORRIDAS");
                                 System.out.print("Digite sua cnh: ");
                                 cnh = ent.nextLine();
-                                gerenciadorViagem.mostrarViagensDisponiveisParaMotoristas(cnh);
+                                boolean haViagens = gerenciadorViagem.mostrarViagensDisponiveisParaMotoristas(cnh);
+                                
+                                if(!haViagens){
+                                    break;
+                                }
                                 
                                 System.out.println("Digite o ID da corrida para aceitar: ");
                                 int idCorrida = ent.nextInt();
+                                
+                                Viagem viagem = repoViagem.buscarViagem(idCorrida);
+                                gerenciadorViagem.iniciarViagem(viagem, cnh);
+                                
+                                System.out.println("Digite 0 quando chegar ao destino");
+                                int encerrou = ent.nextInt();
+                                ent.nextLine();
+                                
+                                if(encerrou == 0){
+                                    System.out.println("Lembre o passageiro de pegar seus pertences no veiculo!");
+                                    System.out.println("\nAvalie seu passageiro!");
+                                    System.out.print("Estrelas (digite um numero de 1 a 5): ");
+                                    int estrelas = ent.nextInt();
+                                    ent.nextLine();
+                                    System.out.print("Digite uma pequena descricao de como foi a viagem: ");
+                                    String descricao = ent.nextLine();
+                                    gerenciadorViagem.encerrarViagem(viagem, estrelas, descricao);
+                                    System.out.println("A DriverPOO agradece sua contribuicao!");
+                                }
                                 break;
+                                
                         }
                     }while(op!=99);
                 }
@@ -285,7 +420,10 @@ public class DriverPOO {
                 System.out.println("Erro na busca: "+e.getMessage());
             } catch(VeiculoNaoIdealException e){
                 System.out.println("Erro na selecao do veiculo: "+e.getMessage());
+            } catch(CategoriaVeiculoNaoValidaException e){
+                System.out.println("Erro ao solicitar viagem: "+e.getMessage());
             }
         }while(op!=0);
     }
+    
 }
