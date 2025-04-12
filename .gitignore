@@ -1,1 +1,21 @@
+# Maven
 /target/
+
+# NetBeans
+nbactions*.xml
+nbproject/private/
+build/
+dist/
+
+# IntelliJ
+.idea/
+*.iml
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# OS
+.DS_Store
+Thumbs.db
