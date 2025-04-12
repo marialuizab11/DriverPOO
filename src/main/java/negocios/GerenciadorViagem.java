@@ -16,7 +16,7 @@ public class GerenciadorViagem {
     RepositorioVeiculo repoVeiculo;
     GerenciadorPagamentos gerenciadorPagamentos;
     GerenciadorPessoa gerenciadorPessoa;
-    
+
     /**
      * Constroi um novo gerenciador de viagem
      * @param repoViagem
@@ -28,9 +28,9 @@ public class GerenciadorViagem {
         this.repoViagem = repoViagem;
         this.repoVeiculo = repoVeiculo;
         this.gerenciadorPagamentos = gerenciadorPagamentos;
-        this.gerenciadorPessoa = gerenciadorPessoa;        
+        this.gerenciadorPessoa = gerenciadorPessoa;
     }
-    
+
     /**
      * Adiciona a forma de pagamento que foi utilizada para pagar a viagem
      * @param id
@@ -45,35 +45,35 @@ public class GerenciadorViagem {
         gerenciadorPagamentos.cadastrarPagamento(idViagem, pagamento);
         
     }
-    
+
     /**
      * Calcula o valor total da viagem a partir de sua categoria. Cada categoria tem sua taxa fixa e o DriverPOO tem valor base da viagem, assim é calculado o valor total.
      * @param categoria
      * @return valor total da viagem
      */
     public double calcularValorTotal(String categoria) {
-    Veiculo veiculoFicticio;
+        Veiculo veiculoFicticio;
 
     switch (categoria) {
-        case "MOTOCICLETA":
-            veiculoFicticio = new Motocicleta("default", 0, "modelo", 0);
-            break;
-        case "ECONOMICO":
-            veiculoFicticio = new Economico("default", 0, "modelo", 0);
-            break;
-        case "SUV":
-            veiculoFicticio = new SUV("default", 0, "modelo", 0);
-            break;
-        case "LUXO":
-            veiculoFicticio = new Luxo("default", 0, "modelo", 0);
-            break;
-        default:
-            return 30; 
+            case "MOTOCICLETA":
+                veiculoFicticio = new Motocicleta("default", 0, "modelo", 0);
+                break;
+            case "ECONOMICO":
+                veiculoFicticio = new Economico("default", 0, "modelo", 0);
+                break;
+            case "SUV":
+                veiculoFicticio = new SUV("default", 0, "modelo", 0);
+                break;
+            case "LUXO":
+                veiculoFicticio = new Luxo("default", 0, "modelo", 0);
+                break;
+            default:
+                return 30;
             
-    }
+        }
     
-    return (20 + (20 * veiculoFicticio.getTaxaFixa())); 
-}
+        return (20 + (20 * veiculoFicticio.getTaxaFixa()));
+    }
 
     /**
      * Solicita uma viagem com passageiros, "corrida".
@@ -89,7 +89,7 @@ public class GerenciadorViagem {
         repoViagem.adicionar(viagem);
         return viagem;
     }
-    
+
     /**
      * Solicita uma viagem de entrega.
      * @param cliente
@@ -103,14 +103,14 @@ public class GerenciadorViagem {
     public Viagem solicitarViagemEntrega(Cliente cliente, Origem origem, Destino destino, double pesoPacoteKg, String categoria) throws VeiculoNaoIdealException{
         if(categoria.equalsIgnoreCase("MOTOCICLETA") && pesoPacoteKg > 5){
             throw new VeiculoNaoIdealException("Motocicleta nao entrega pacotes com mais de 5kg!");
-        }        
+        }
         double valorViagem = calcularValorTotal(categoria);
         
         ViagemEntrega viagem = new ViagemEntrega(origem, destino, null, null, cliente, categoria, pesoPacoteKg, valorViagem);
         repoViagem.adicionar(viagem);
         return viagem;
     }
-    
+
     /**
      * Inicia uma viagem aceita pelo motorista
      * @param viagem
@@ -126,7 +126,7 @@ public class GerenciadorViagem {
         System.out.println("== VOCE ESTA INDO PARA: ==");
         System.out.println(viagem.getDestino().getNome());
     }
-    
+
     /**
      * Encerra uma viagem.
      * @param viagem 
@@ -134,7 +134,7 @@ public class GerenciadorViagem {
     public void encerrarViagem(Viagem viagem){
         viagem.getMotorista().setDisponivel(true);
     }
-    
+
     /**
      * Lista de viagens que ainda nao foram aceitas de uma determinada categoria.
      * @param categoria
@@ -149,13 +149,13 @@ public class GerenciadorViagem {
         }
         return disponiveis;
     }
-    
+
     /**
      * Mostra as viagens disponiveis para o motorista (que tem um veiculo de determinado tipo).
      * @param motorista
      * @return lista de viagens que o motorista pode aceitar
      */
-    public boolean mostrarViagensDisponiveisParaMotoristas(Motorista motorista) {        
+    public boolean mostrarViagensDisponiveisParaMotoristas(Motorista motorista) {
         gerenciadorPessoa.verificarValidacaoMotorista(motorista);
         gerenciadorPessoa.verificarVeiculoMotorista(motorista);
         
@@ -178,7 +178,7 @@ public class GerenciadorViagem {
         }
         return true;
     }
-    
+
     /**
      * Cliente avalia o motorista
      * @param id da viagem
@@ -190,7 +190,7 @@ public class GerenciadorViagem {
         Avaliacao avaliacaoCliente = new Avaliacao(descricao, estrelas);
         repoViagem.adicionarAvaliacaoCliente(viagem, avaliacaoCliente);
     }
-    
+
     /**
      * Motorista avalia o cliente
      * @param viagem 
@@ -201,7 +201,7 @@ public class GerenciadorViagem {
         Avaliacao avaliacaoMotorista = new Avaliacao(descricao, estrelas);
         repoViagem.adicionarAvaliacaoMotorista(viagem, avaliacaoMotorista);
     }
-    
+
     /**
      * Mostra todas as viagens que o motorista ja fez.
      * @param motorista
@@ -213,7 +213,7 @@ public class GerenciadorViagem {
             throw new PessoaSemViagensException("Motorista ainda nao realizou nenhuma viagem");
         }
     }
-    
+
     /**
      * Mostra todas as viagens que o cliente ja fez
      * @param cliente

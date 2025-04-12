@@ -4,14 +4,10 @@ import dados.RepositorioPagamentos;
 import negocios.basicas.FormaDePagamento;
 import negocios.excecoes.PagamentoRecusadoException;
 
-/**
- * Responsavel por coordenar todas as operacoes de pagamento do sistema.
- * 
- * @author Maria Luiza Bezerra
- */
 public class GerenciadorPagamentos {
+
     RepositorioPagamentos repoPagamentos;
-    
+
     /**
      * Constroi um novo gerenciador de pagamentos.
      * 
@@ -20,7 +16,7 @@ public class GerenciadorPagamentos {
     public GerenciadorPagamentos(RepositorioPagamentos repoPagamentos){
         this.repoPagamentos = repoPagamentos;
     }
-    
+
     /**
      * Gera uma chave PIX unica para um pagamento.
      * @param valor
@@ -29,7 +25,7 @@ public class GerenciadorPagamentos {
     public String gerarChavePix(double valor){
         return repoPagamentos.gerarPix(valor);
     }
-    
+
     /**
      * Valida a configuracao de um pagamento via PIX
      * @param confirmacao
@@ -40,7 +36,7 @@ public class GerenciadorPagamentos {
             throw new PagamentoRecusadoException("Pagamento por pix nao concluido");
         }
     }
-    
+
     /**
      * Processa um pagamento com cartao de credito, verificando o limite disponivel
      * @param limite
@@ -52,7 +48,7 @@ public class GerenciadorPagamentos {
             throw new PagamentoRecusadoException("Cartao de Credito sem limite");
         }
     }
-    
+
     /**
      * Registra um pagamento no sistema associando-o uma viagem.
      * 

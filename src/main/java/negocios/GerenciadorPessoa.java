@@ -5,14 +5,9 @@ import negocios.basicas.Cliente;
 import negocios.basicas.Motorista;
 import negocios.excecoes.*;
 
-/**
- * Gerencia as operacoes relacionadas a pessoas (clientes e motoristas) no sistema.
- * 
- * @author Maria Luiza Bezerra
- */
 public class GerenciadorPessoa {
     RepositorioPessoa repoPessoa;
-    
+
     /**
      * Constroi um novo gerenciador de pessoas com repositorio especificado.
      * @param repoPessoa 
@@ -20,7 +15,7 @@ public class GerenciadorPessoa {
     public GerenciadorPessoa(RepositorioPessoa repoPessoa){
         this.repoPessoa = repoPessoa;
     }
-    
+
     /**
      * Verifica se um motorista esta validado (apto para aceitar corridas)
      * @param motorista 
@@ -29,7 +24,7 @@ public class GerenciadorPessoa {
     public boolean isMotoristaValido(Motorista motorista){
         return motorista != null && motorista.isValidado();
     }
-    
+
     /**
      * Valida um motorista pedindo para ele digitar corretamente sua cnh, cpf e email cadastrado.
      * @param motorista
@@ -46,7 +41,7 @@ public class GerenciadorPessoa {
         }
         repoPessoa.atualizarValidacao(motorista);
     }
-    
+
     /**
      * Cadastra o motorista no sistema, chamando o adicionarMotorista do repositorio
      * @param nome nome completo
@@ -62,7 +57,7 @@ public class GerenciadorPessoa {
         }
         repoPessoa.adicionarMotorista(new Motorista(nome, email, telefone, cpf, cnh));
     }
-    
+
     /**
      * Cadastrar novo cliente no sistema.
      * 
@@ -76,9 +71,9 @@ public class GerenciadorPessoa {
         if(repoPessoa.buscarPorCpf(cpf) != null){
             throw new PessoaJaCadastradaException("Cliente ja cadastrado no sistema");
         }
-        repoPessoa.adicionarCliente(new Cliente(nome, email, telefone, cpf));    
+        repoPessoa.adicionarCliente(new Cliente(nome, email, telefone, cpf));
     }
-    
+
     /**
      * Busca um cliete pelo seu cpf
      * @param cpf
@@ -92,7 +87,7 @@ public class GerenciadorPessoa {
         }
         return cliente;
     }
-    
+
     /**
      * Busca um motorista pela cnh.
      * @param cnh
@@ -106,7 +101,7 @@ public class GerenciadorPessoa {
         }
         return motorista;
     }
-    
+
     /**
      * Remove um cliente do sistema
      * @param cliente
@@ -115,10 +110,10 @@ public class GerenciadorPessoa {
     public void removerCliente(Cliente cliente) throws PessoaNaoEncontradaException{
         if(cliente == null){
             throw new PessoaNaoEncontradaException("Cliente nao encontrado");
-        }        
+        }
         repoPessoa.removerCliente(cliente.getCpf());
     }
-    
+
     /**
      * Remove um motorista do sistema.
      * @param cnh
@@ -132,7 +127,7 @@ public class GerenciadorPessoa {
         }
         repoPessoa.removerMotorista(cnh);
     }
-    
+
     /**
      * Verifica se o motorista esta disponivel. Um motorista nao pode aceitar mais de uma corrida.
      * @param motorista
@@ -159,7 +154,7 @@ public class GerenciadorPessoa {
         }
         repoPessoa.atualizar(cliente, email, telefone);
     }
-    
+
     /**
      * Adiciona um veiculo a um motorista.
      * @param motorista
@@ -168,7 +163,7 @@ public class GerenciadorPessoa {
     public void adicionarVeiculoMotorista(Motorista motorista, int idVeiculo) {
         repoPessoa.atualizarVeiculoDoMotorista(motorista, idVeiculo);
     }
-    
+
     /**
      * Verifica se o motorista ja esta validado.
      * @param motorista
@@ -179,7 +174,7 @@ public class GerenciadorPessoa {
             throw new MotoristaNaoValidadoException("O motorista deve estar validado para aceitar corridas");
         }
     }
-    
+
     /**
      * Verifica se o motorista tem um veiculo.
      * @param motorista
@@ -190,6 +185,4 @@ public class GerenciadorPessoa {
             throw new MotoristaSemVeiculoException("O motorista deve ter um veiculo cadastrado para comecar a trabalhar");
         }
     }
-    
-    
 }

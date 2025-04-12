@@ -114,7 +114,8 @@ public class DriverPOO {
                                 System.out.println("EXCLUIR CONTA");
                                 
                                 gerenciadorPessoa.removerCliente(cliente);
-                                System.out.print("Sucesso! Conta excluida.");
+                                System.out.println("Sucesso! Conta excluida.");
+                                op = 99;
                                 break;
                             case 3:
                                 String nomeRuaOrigem, nomeRuaDestino;  
@@ -356,6 +357,7 @@ public class DriverPOO {
                                 }
                                 
                                 System.out.println("Sucesso! Conta do motorista e veiculo (se existir) excluidos do sistema");
+                                op = 99;
                                 break;
                             case 3:
                                 System.out.println("EXCLUIR VEICULO");
