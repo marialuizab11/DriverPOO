@@ -3,6 +3,8 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
+ * Representa um veiculo do tipo "Carro SUV" no sistema.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class SUV extends Veiculo implements Serializable{
@@ -13,6 +15,7 @@ public class SUV extends Veiculo implements Serializable{
         super(placa, capacidade, modelo, 0.4, idMotorista);
     }
     
+    /*Retorna a categoria do veiculo*/
     @Override
     public String getCategoria(){
         return "SUV";

@@ -3,7 +3,7 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
- * Representa uma forma de pagamento via cartao de credito no sistema
+ * Representa uma forma de pagamento via cartao de credito no sistema.
  * 
  * @author Maria Luiza Bezerra
  */
@@ -18,14 +18,14 @@ public class CartaoCredito extends FormaDePagamento implements Serializable {
     private double limite;
 
     /**
-     * Construtor da classe CartaoCredito
+     * Cria um novo cartao de credito no sistema.
      * 
-     * @param nomeTitular nome do titular 
-     * @param numero numero completo 
-     * @param cvv codigo de seguranca
-     * @param dataVencimento data de vencimento
-     * @param limite limite total
-     * @param valor valor que sera cobrado da corrida
+     * @param nomeTitular
+     * @param numero
+     * @param cvv 
+     * @param dataVencimento
+     * @param limite 
+     * @param valor 
      */
     public CartaoCredito(String nomeTitular, String numero, int cvv, String dataVencimento, double limite, double valor) {
         super(valor);
@@ -44,6 +44,7 @@ public class CartaoCredito extends FormaDePagamento implements Serializable {
         return limite;
     }
     
+    /*Retorna o tipo de Forma de Pagamento*/
     public String getTipo(){
         return "Cartao de Credito";
     }

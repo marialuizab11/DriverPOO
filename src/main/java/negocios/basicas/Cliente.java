@@ -13,10 +13,9 @@ public class Cliente extends Pessoa implements Serializable {
 
     private static final long serialVersionUID = -5632156220270537037L;
     
-    private List<FormaDePagamento> formasPagamento;
-    
     /**
-     * Construtor da classe Cliente
+     * Cria um novo cliente no sistema.
+     * 
      * @param nome 
      * @param email
      * @param telefone
@@ -24,11 +23,7 @@ public class Cliente extends Pessoa implements Serializable {
      */
     public Cliente(String nome, String email, String telefone, String cpf) {
         super(nome, email, telefone, cpf);
-        this.formasPagamento = new ArrayList<>();
     }
     
-    public List<FormaDePagamento> getFormasPagamento(){
-        return formasPagamento;
-    }
 
 }

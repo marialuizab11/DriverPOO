@@ -3,6 +3,8 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
+ * Representa uma forma generica de local no sistema.
+ * 
  * @author Maria Luiza Bezerra
  */
 public abstract class Local implements Serializable{

@@ -3,6 +3,8 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
+ * Representa uma viagem generica no sistema
+ * 
  * @author Maria Luiza Bezerra
  */
 public abstract class Viagem implements Serializable {
@@ -22,6 +24,17 @@ public abstract class Viagem implements Serializable {
     private Avaliacao avaliacaoCliente;
     private Avaliacao avaliacaoMotorista;
 
+    /**
+     * Cria uma viagem.
+     * 
+     * @param origem
+     * @param destino
+     * @param motorista
+     * @param veiculo
+     * @param cliente
+     * @param categoria
+     * @param valorTotal 
+     */
     public Viagem(Origem origem, Destino destino, Motorista motorista, Veiculo veiculo, Cliente cliente, String categoria, double valorTotal) {
         this.origem = origem;
         this.destino = destino;

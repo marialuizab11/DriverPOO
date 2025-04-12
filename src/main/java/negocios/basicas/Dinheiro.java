@@ -13,12 +13,13 @@ public class Dinheiro extends FormaDePagamento implements Serializable{
 
     /**
      * Construtor da classe Dinheiro
-     * @param valor valor a ser cobrado da corrida
+     * @param valor 
      */
     public Dinheiro(double valor) {
         super(valor);
     }
     
+    /*Retorna o tipo de Forma De Pagamento*/
     public String getTipo() {
         return "Dinheiro";
     }

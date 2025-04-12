@@ -1,6 +1,8 @@
 package negocios.basicas;
 
 /**
+ * Representa uma classe generica de forma de pagamento no sistema.
+ * 
  * @author Maria Luiza Bezerra
  */
 public abstract class FormaDePagamento {

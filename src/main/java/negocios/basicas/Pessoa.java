@@ -3,7 +3,7 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
- * Representa uma pessoa no sistema.
+ * Representa uma pessoa generica no sistema.
  * 
  * @author Maria Luiza Bezerra
  */
@@ -19,10 +19,11 @@ public abstract class Pessoa implements Serializable {
 
     /**
      * Construtor da classe Pessoa
-     * @param nome nome completo
-     * @param email email para contato  
-     * @param telefone telefone
-     * @param cpf cpf sem caracteres
+     * 
+     * @param nome 
+     * @param email 
+     * @param telefone 
+     * @param cpf 
      */
     public Pessoa(String nome, String email, String telefone, String cpf) {
         this.nome = nome;

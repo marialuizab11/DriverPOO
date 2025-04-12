@@ -3,6 +3,8 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
+ * Representa uma avaliacao no sistema, contendo uma classificacao por estrelas e uma descricao textual.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class Avaliacao implements Serializable{
@@ -11,6 +13,12 @@ public class Avaliacao implements Serializable{
     private String descricao;
     private int estrelas;
 
+    /**
+     * Cria uma nova avaliacao com descricao e classificacao por estrelas.
+     * 
+     * @param descricao
+     * @param estrelas 
+     */
     public Avaliacao(String descricao, int estrelas) {
         this.descricao = descricao;
         this.estrelas = estrelas;

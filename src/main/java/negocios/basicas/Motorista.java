@@ -16,7 +16,8 @@ public class Motorista extends Pessoa implements Serializable{
     private boolean disponivel;
         
     /**
-     * Construtor da classe motorista
+     * Cria um novo motorista.
+     * O motorista é criado como nao valido e disponivel (nao esta fazendo viagem).
      * @param nome
      * @param email
      * @param telefone

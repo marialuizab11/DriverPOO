@@ -3,6 +3,8 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
+ * Representa uma viagem de corrida no sistema.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class ViagemPassageiro extends Viagem implements Serializable {

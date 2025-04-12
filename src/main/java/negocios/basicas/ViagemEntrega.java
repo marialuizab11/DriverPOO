@@ -3,6 +3,8 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
+ * Representa uma viagem de entrega no sistema.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class ViagemEntrega extends Viagem implements Serializable {

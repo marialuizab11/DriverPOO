@@ -3,11 +3,14 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
+ * Representa um veiculo generico no sistema.
+ * 
  * @author Maria Luiza Bezerra
  */
 public abstract class Veiculo implements Serializable {
 
     private static final long serialVersionUID = 7266152354283342286L;
+    
     private static int proximoId = 1;
     private final int id;
     private String placa;
@@ -16,6 +19,15 @@ public abstract class Veiculo implements Serializable {
     private int idMotorista;
     private double taxaFixa;
 
+    /**
+     * Cria um veiculo.
+     * Um veiculo so deve existir se estiver relacionado com um motorista.
+     * @param placa
+     * @param capacidade
+     * @param modelo
+     * @param taxaFixa
+     * @param idMotorista 
+     */
     public Veiculo(String placa, int capacidade, String modelo, double taxaFixa, int idMotorista) {
         this.placa = placa;
         this.capacidade = capacidade;

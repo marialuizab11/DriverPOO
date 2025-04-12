@@ -3,6 +3,8 @@ package negocios.basicas;
 import java.io.Serializable;
 
 /**
+ * Representa um local que sera a origem da viagem.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class Origem extends Local implements Serializable {
