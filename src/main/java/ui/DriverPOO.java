@@ -1,13 +1,20 @@
 package ui;
 
-import dados.*;
-import java.util.List;
 import java.util.Scanner;
+import dados.*;
 import negocios.*;
 import negocios.basicas.*;
 import negocios.excecoes.*;
+
 /**
- *
+ * Classe principal que representa a interface do usuario do sistema DriverPOO.
+ * 
+ * Esta classe implementa o menu interativo para:
+ *  Cadastro e login de clientes e motoristas.
+ *  Solicitacao e gerenciamento de viagens.
+ *  Operacao de pagamentos
+ *  Avaliacao das viagens
+ * 
  * @author Maria Luiza Bezerra
  */
 public class DriverPOO {
@@ -28,6 +35,7 @@ public class DriverPOO {
         
         String nome, cpf, cnh, email, telefone;
         
+        /*Exibe o menu principal e gerencia a navegacao*/
         System.out.println("\n== BEM VINDO AO DRIVERPOO ==");
         
         do{
@@ -41,6 +49,7 @@ public class DriverPOO {
             ent.nextLine();
             
             try{
+                /* Fluxo de cadastro de novo cliente */
                 if(op == 1){
                     System.out.println("CADASTRO DE NOVO CLIENTE");
                     System.out.print("Nome: ");
@@ -55,7 +64,7 @@ public class DriverPOO {
                     gerenciadorPessoa.cadastrarCliente(nome, email, telefone, cpf);
                     System.out.print("\nSucesso! Conta criada.");
                 }
-                
+                /* Fluxo de cadastro de novo motorista */
                 if(op == 2){
                     System.out.println("CADASTRO DE NOVO MOTORISTA");
                     System.out.print("Nome: ");
@@ -74,13 +83,14 @@ public class DriverPOO {
                     System.out.println("Nao esqueca de VALIDAR seu cadastro para comecar a trabalhar...");
                 }
                 
+                /* Fluxo de login do cliente */
                 if(op == 3){
                     System.out.println("== CLIENTES DRIVERPOO ==");
                     System.out.print("CPF: ");
                     cpf = ent.nextLine();
                     Cliente cliente = gerenciadorPessoa.buscarCliente(cpf);
                     do{
-                        System.out.println("1 - Atualizar suas informacoes");
+                        System.out.println("\n1 - Atualizar suas informacoes");
                         System.out.println("2 - Excluir conta");
                         System.out.println("3 - Solicitar viagem de entrega");
                         System.out.println("4 - Solicitar corrida");
@@ -99,14 +109,12 @@ public class DriverPOO {
                                 
                                 gerenciadorPessoa.atualizarCliente(cliente, email, telefone);
                                 System.out.print("Sucesso! Informacoes atualizadas.");
-                                repoPessoa.listarClientes();
                                 break;
                             case 2:
                                 System.out.println("EXCLUIR CONTA");
                                 
                                 gerenciadorPessoa.removerCliente(cliente);
                                 System.out.print("Sucesso! Conta excluida.");
-                                repoPessoa.listarClientes();
                                 break;
                             case 3:
                                 String nomeRuaOrigem, nomeRuaDestino;  
@@ -187,7 +195,6 @@ public class DriverPOO {
                                     System.out.println("Opcao invalida!");
                                     break;
                                 }
-                                repoViagem.listarViagens();
                                 break;
                             case 4:
                                 System.out.println("SOLICITAR VIAGEM DE CORRIDA");
@@ -261,7 +268,6 @@ public class DriverPOO {
                                     System.out.println("Opcao invalida!");
                                     break;
                                 }
-                                repoViagem.listarViagens();
                                 break;
                             case 5:
                                 System.out.println("Agora eh hora de avaliar!");
@@ -287,13 +293,14 @@ public class DriverPOO {
                     } while(op!=99);
                 }
 
+                /* Fluxo de login do motorista */
                 if(op == 4){
                     System.out.println("== MOTORISTAS DRIVERPOO ==");
                     System.out.print("CNH: ");
                     cnh = ent.nextLine();
                     Motorista motorista = gerenciadorPessoa.buscarMotorista(cnh);
                     do{
-                        System.out.println("1 - Cadastro de veiculo");
+                        System.out.println("\n1 - Cadastro de veiculo");
                         System.out.println("2 - Excluir conta");
                         System.out.println("3 - Excluir veiculo");
                         System.out.println("4 - Validar motorista");
@@ -383,22 +390,28 @@ public class DriverPOO {
                                 
                                 Viagem viagem = repoViagem.buscarViagem(idCorrida);
                                 gerenciadorViagem.iniciarViagem(viagem, cnh);
+
+                                int encerrou = 1;
                                 
-                                System.out.print("Digite 0 quando chegar ao destino");
-                                int encerrou = ent.nextInt();
-                                ent.nextLine();
-                                
-                                if(encerrou == 0){
-                                    System.out.println("Lembre o passageiro de pegar seus pertences no veiculo!");
-                                    gerenciadorViagem.encerrarViagem(viagem);
-                                    System.out.println("\nAvalie seu passageiro!");
-                                    System.out.print("Estrelas (digite um numero de 1 a 5): ");
-                                    int estrelas = ent.nextInt();
+                                while(encerrou != 0){
+                                    System.out.print("Digite 0 quando chegar ao destino: ");
+                                    encerrou = ent.nextInt();
                                     ent.nextLine();
-                                    System.out.print("Digite uma pequena descricao de como foi a viagem: ");
-                                    String descricao = ent.nextLine();
-                                    gerenciadorViagem.avaliarCliente(viagem, estrelas, descricao);
-                                    System.out.println("A DriverPOO agradece sua contribuicao!");
+                                    if(encerrou == 0){
+                                        System.out.println("Lembre o passageiro de pegar seus pertences no veiculo!");
+                                        gerenciadorViagem.encerrarViagem(viagem);
+                                        System.out.println("\nAvalie seu passageiro!");
+                                        System.out.print("Estrelas (digite um numero de 1 a 5): ");
+                                        int estrelas = ent.nextInt();
+                                        ent.nextLine();
+                                        System.out.print("Digite uma pequena descricao de como foi a viagem: ");
+                                        String descricao = ent.nextLine();
+                                        gerenciadorViagem.avaliarCliente(viagem, estrelas, descricao);
+                                        System.out.println("A DriverPOO agradece sua contribuicao!");
+                                        break;
+                                    } else{
+                                        System.out.println("NUMERO INVALIDO!!");
+                                    }
                                 }
                                 break;
                             case 6:
@@ -413,6 +426,7 @@ public class DriverPOO {
                         }
                     }while(op!=99);
                 }
+            /*Tratamento de excecoes que ocasionalmente podem ser lancadas */
             } catch(MotoristaNaoDisponivelException | MotoristaNaoValidadoException | MotoristaSemVeiculoException e){
                 System.out.println("Erro ao iniciar corrida: " + e.getMessage());
             } catch(PagamentoRecusadoException e){
