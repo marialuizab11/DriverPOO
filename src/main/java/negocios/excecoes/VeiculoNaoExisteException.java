@@ -3,6 +3,8 @@ package negocios.excecoes;
 import java.io.Serializable;
 
 /**
+ * Excecao lancada quando um veiculo nao foi encontrado no sistema, ou seja, nao foi cadastrado.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class VeiculoNaoExisteException extends RuntimeException implements Serializable {

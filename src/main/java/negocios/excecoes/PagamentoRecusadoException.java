@@ -3,6 +3,8 @@ package negocios.excecoes;
 import java.io.Serializable;
 
 /**
+ * Excecao lancada quando o pagamento da viagem nao foi aceita.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class PagamentoRecusadoException extends RuntimeException implements Serializable {

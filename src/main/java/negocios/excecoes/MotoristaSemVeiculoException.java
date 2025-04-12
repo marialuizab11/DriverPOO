@@ -3,6 +3,8 @@ package negocios.excecoes;
 import java.io.Serializable;
 
 /**
+ * Excecao lancada quando o motorista tenta aceitar uma corrida mas nao tem nenhum veiculo cadastrado.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class MotoristaSemVeiculoException extends RuntimeException implements Serializable {

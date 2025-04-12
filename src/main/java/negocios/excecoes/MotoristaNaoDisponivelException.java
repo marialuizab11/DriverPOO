@@ -3,6 +3,8 @@ package negocios.excecoes;
 import java.io.Serializable;
 
 /**
+ * Excecao lancada quando um motorista ja esta em uma viagem, ou seja, nao esta disponivel.
+ * 
  * @author Maria Luiza Bezerra
  */
 public class MotoristaNaoDisponivelException extends RuntimeException implements Serializable {
